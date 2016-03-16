@@ -29,7 +29,8 @@ def parse_parts(s):
         res += parse_single_part(p)
     return list(set(res))
 
-def translate(lst):
+def translate(fname):
+    lst = [x.strip() for x in open(fname)]
     res = []
     for i in range(N_DANCER):
         v = []
@@ -45,13 +46,18 @@ def translate(lst):
         end = bbf2sec(tokens[1])
         parts = parse_parts(tokens[2])
         #print(start, end, parts)
+        ltype = 1 # 1=ON, 2=Fade in, 3=Fade out
+        if len(tokens) >= 4:
+            if tokens[3] == 'FI':
+                ltype = 2
+            elif tokens[3] == 'FO':
+                ltype = 3
         for i, j in parts:
-            res[i][j].append((start, end))
+            res[i][j].append((start, end, ltype))
 
     return res
 
 if __name__ == '__main__':
-    lst = [x.strip() for x in open('test.in')]
-    res = translate(lst)
+    res = translate('test.in')
 
     print(res)

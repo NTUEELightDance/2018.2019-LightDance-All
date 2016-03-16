@@ -1,4 +1,9 @@
 # Bar-Beat(-Fraction) Bar-Beat(-Fraction) Parts
-1-1 1-3 1234ABCDE+567CDE 
-1-4 1-4-1/2 234BCE+16AGH 
-2-1 3-1 1234567ABCDEFGHIJ
+1-1 1-2 1A
+1-2 1-3 1B
+1-3 1-4 1A
+1-4 2-1 1B
+2-1 2-2 1A
+2-2 2-3 1B
+2-3 2-4 1A
+2-4 3-1 1B

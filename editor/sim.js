@@ -18,6 +18,16 @@ var YELLOW_D = "#111100";
 var RED = "#FF0000";
 var RED_D = "#220000";
 
+function color(c, x)
+{
+  var num = parseInt(1 + 14 * x / 255.0);
+  var z = (num<10 ? String.fromCharCode(0x30+num) : String.fromCharCode(0x41+num-10));
+  if(c == "Blue") return "#0000" + z + z;
+  if(c == "Green") return "#00" + z + z + "00";
+  if(c == "Yellow") return "#" + z + z + z + z + "00";
+  if(c == "Red") return "#" + z + z + "0000";
+}
+
 Data = JSON.parse(Data);
 Pos = JSON.parse(Pos);
 
@@ -118,7 +128,7 @@ function animate(darr, canvas, ctx, startTime)
     for(var j=0; j<N_PART; j++)
     {
       var res = getLight(i, j, time);
-      darr[i].setLight(j, res > 0);
+      darr[i].setLight(j, res);
       var pos = getPos(i, time);
       darr[i].setBasePos(pos[0], pos[1]);
     }
@@ -170,7 +180,7 @@ Dancer.prototype.draw = function()
       );
 
   // A head
-  ctx.strokeStyle = (this.light[0] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[0]);
   ctx.beginPath();
   ctx.arc(
       this.base_x + this.width / 2,
@@ -185,7 +195,7 @@ Dancer.prototype.draw = function()
   var b1_height = 30;
   var b2_height = 16;
   var b1_width = 30;
-  ctx.strokeStyle = (this.light[7] ? GREEN : GREEN_D);
+  ctx.strokeStyle = color("Green", this.light[7]);
   ctx.strokeRect(
       this.base_x + this.width/2 - b1_width/2,
       this.base_y + head_radius * 2,
@@ -193,7 +203,7 @@ Dancer.prototype.draw = function()
       b1_height
       );
 
-  ctx.strokeStyle = (this.light[8] ? YELLOW : YELLOW_D);
+  ctx.strokeStyle = color("Yellow", this.light[8]);
   ctx.strokeRect(
       this.base_x + this.width/2 - b1_width/2,
       this.base_y + head_radius * 2 + b1_height + 5,
@@ -208,21 +218,21 @@ Dancer.prototype.draw = function()
   var l_width = 11;
   var f_height = 6;
   var f_width = 14;
-  ctx.strokeStyle = (this.light[9] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[9]);
   ctx.strokeRect(
       this.base_x + this.width/2 - l_width*1.35,
       this.base_y + 100,
       l_width,
       l1_height
       );
-  ctx.strokeStyle = (this.light[10] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[10]);
   ctx.strokeRect(
       this.base_x + this.width/2 + l_width*0.35,
       this.base_y + 100,
       l_width,
       l1_height
       );
-  ctx.strokeStyle = (this.light[11] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[11]);
   ctx.strokeRect(
       this.base_x + this.width/2 - l_width*1.35,
       this.base_y + 100 + l1_height + 5,
@@ -236,7 +246,7 @@ Dancer.prototype.draw = function()
       f_height
       );
 
-  ctx.strokeStyle = (this.light[12] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[12]);
   ctx.strokeRect(
       this.base_x + this.width/2 + l_width*0.35,
       this.base_y + 100 + l1_height + 5,
@@ -256,28 +266,28 @@ Dancer.prototype.draw = function()
   var h1_height = 10;
   var h2_height = 15;
   var h_radius = 7;
-  ctx.strokeStyle = (this.light[1] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[3]);
   ctx.strokeRect(
       this.base_x + h_width,
       this.base_y + head_radius*2,
       h_width,
       h1_height
       );
-  ctx.strokeStyle = (this.light[1] ? YELLOW : YELLOW_D);
+  ctx.strokeStyle = color("Yellow", this.light[3]);
   ctx.strokeRect(
       this.base_x + h_width,
       this.base_y + head_radius*2 + h1_height + 5,
       h_width,
       h1_height
       );
-  ctx.strokeStyle = (this.light[2] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[2]);
   ctx.strokeRect(
       this.base_x + h_width,
       this.base_y + head_radius*2 + 2*h1_height + 10,
       h_width,
       h2_height
       );
-  ctx.strokeStyle = (this.light[3] ? GREEN : GREEN_D);
+  ctx.strokeStyle = color("Green", this.light[1]);
   ctx.beginPath();
   ctx.arc(
       this.base_x + h_width + h_radius - 2,
@@ -288,28 +298,28 @@ Dancer.prototype.draw = function()
       );
   ctx.stroke();
   
-  ctx.strokeStyle = (this.light[4] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[4]);
   ctx.strokeRect(
       this.base_x + this.width - h_width*2,
       this.base_y + head_radius*2,
       h_width,
       h1_height
       );
-  ctx.strokeStyle = (this.light[4] ? YELLOW : YELLOW_D);
+  ctx.strokeStyle = color("Yellow", this.light[4]);
   ctx.strokeRect(
       this.base_x + this.width - h_width*2,
       this.base_y + head_radius*2 + h1_height + 5,
       h_width,
       h1_height
       );
-  ctx.strokeStyle = (this.light[5] ? BLUE : BLUE_D);
+  ctx.strokeStyle = color("Blue", this.light[5]);
   ctx.strokeRect(
       this.base_x + this.width - h_width*2,
       this.base_y + head_radius*2 + 2*h1_height + 10,
       h_width,
       h2_height
       );
-  ctx.strokeStyle = (this.light[6] ? GREEN : GREEN_D);
+  ctx.strokeStyle = color("Green", this.light[6]);
   ctx.beginPath();
   ctx.arc(
       this.base_x + this.width - h_width*2 + h_radius - 2,

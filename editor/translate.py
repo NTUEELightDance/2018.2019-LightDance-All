@@ -18,7 +18,7 @@ def parse_single_part(s):
     res = []
     for i in range(N_DANCER):
         for j in range(N_PART):
-            if chr(ord('1')+i) in s and chr(ord('A')+j) in s:
+            if chr(ord('1')+i) in s and (chr(ord('A')+j) in s or 'Z' in s):
                 res.append((i, j))
     return res
 
@@ -39,7 +39,7 @@ def translate(fname):
         res.append(v)
 
     for line in lst:
-        if(line[0] == '#'):
+        if line.strip() == '' or line[0] == '#':
             continue
         tokens = line.split()
         start = bbf2sec(tokens[0])
@@ -66,7 +66,7 @@ def translate_pos(fname):
     tm = 0
     sm = False
     for line in lst:
-        if(line[0] == '#'):
+        if line.strip() == '' or line[0] == '#':
             continue
         tokens = line.split()
         if len(tokens) <= 2:
@@ -102,4 +102,4 @@ if __name__ == '__main__':
         f.write(s)
         f.write("\";")
         f.close()
-        time.sleep(5)
+        time.sleep(2)

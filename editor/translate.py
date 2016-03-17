@@ -1,7 +1,7 @@
 BPM = 128.000
 SEC_BEAT = 60. / BPM
 N_DANCER = 7
-N_PART = 10
+N_PART = 13
 
 def bbf2sec(bbf):
     tokens = bbf.split('-')
@@ -57,7 +57,49 @@ def translate(fname):
 
     return res
 
-if __name__ == '__main__':
-    res = translate('test.in')
+def translate_pos(fname):
+    lst = [x.strip() for x in open(fname)]
+    res = []
+    for i in range(N_DANCER):
+        res.append([])
 
-    print(res)
+    tm = 0
+    sm = False
+    for line in lst:
+        if(line[0] == '#'):
+            continue
+        tokens = line.split()
+        if len(tokens) <= 2:
+            tm = bbf2sec(tokens[0])
+            sm = (len(tokens) >= 2)
+        else:
+            num = int(tokens[0]) - 1
+            bx = int(tokens[1])
+            by = int(tokens[2])
+            if not sm:
+                res[num].append((tm, res[num][-1][1], res[num][-1][2]))
+            res[num].append((tm, bx, by))
+
+    return res
+
+if __name__ == '__main__':
+    import json
+    import time
+
+    while True:
+        res = translate('test.in')
+        s = json.dumps(res)
+        f = open('light.js', 'w')
+        f.write("var Data = \"")
+        f.write(s)
+        f.write("\";")
+        f.close()
+        
+        res = translate_pos('test.pos')
+        s = json.dumps(res)
+        f = open('pos.js', 'w')
+        f.write("var Pos = \"")
+        f.write(s)
+        f.write("\";")
+        f.close()
+        time.sleep(5)

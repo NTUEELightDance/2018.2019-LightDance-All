@@ -64,7 +64,7 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
 
 if __name__ == "__main__":
-    Data = translate.translate('../editor/test2.in')
+    Data = translate.translate('../editor/test.in')
 
     socketserver.TCPServer.allow_reuse_address = True
     server = ThreadedTCPServer((HOST, PORT), ThreadedTCPRequestHandler)

@@ -12,12 +12,11 @@
 #include <sstream>
 #include <algorithm>
 
-#define BOARD_ID 2
+#define BOARD_ID 3
 #define N_PART 10
 #define DEBUG 1
 #define MAX_LEN 131072
 #define BUF_LEN 2048
-#define FILENAME "test.txt"
 
 using namespace std;
 
@@ -28,6 +27,7 @@ double get_time();
 
 bool retrieve_data();
 int get_light(int, double);
+int curve(int);
 
 struct Seg
 {

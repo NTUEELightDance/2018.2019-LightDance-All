@@ -10,6 +10,7 @@ HOST = ''
 PORT = 33117
 TIME_BASE = 0
 START_DELAY = 20
+MUSIC_DELAY = -0.040
 
 Ready = False
 Data = None
@@ -90,7 +91,7 @@ if __name__ == "__main__":
             if tm - lst_time >= print_interval:
                 lst_time += print_interval
                 print('Time : {}'.format(lst_time))
-            if tm >= 0 and not audio_played:
+            if tm >= MUSIC_DELAY and not audio_played:
                 audio_played = True
                 subprocess.Popen(['afplay', '../music/disconnected_02.wav'])
 

@@ -71,8 +71,18 @@ int get_light(int part, double tm)
   Seg& seg = vec[lb];
   if(seg.start <= tm && tm <= seg.end)
   {
-    res = 255;
+    if(seg.ltype == 1)
+      res = 255;
+    else if(seg.ltype == 2)
+      res = 255 * (tm - seg.start) / (seg.end - seg.start);
+    else if(seg.ltype == 3)
+      res = 255 * (seg.end - tm) / (seg.end - seg.start);
   }
     
   return res;
+}
+
+int curve(int x)
+{
+  return x;
 }

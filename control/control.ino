@@ -42,9 +42,8 @@ void loop() {
   double tm = get_time();
   for(int i=0; i<N_PART; i++)
   {
-    int light = get_light(i, tm);
-    bool state = light;
-    digitalWrite(PINS[i], state ? HIGH : LOW);
+    int light = curve(get_light(i, tm));
+    digitalWrite(PINS[i], rand() % 255 < light ? HIGH : LOW);
   }
 }
 

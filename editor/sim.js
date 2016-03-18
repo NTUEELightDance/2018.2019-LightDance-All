@@ -86,9 +86,23 @@ function getLight(idx, part, time)
       lb = mb;
   }
 
-  if(Data[idx][part][lb][0] <= time && time <= Data[idx][part][lb][1])
+  var st = Data[idx][part][lb][0];
+  var ed = Data[idx][part][lb][1];
+  var ty = Data[idx][part][lb][2];
+  if(st <= time && time <= ed)
   {
-    res = 255;
+    if(ty == 1)
+      res = 255;
+    else if(ty == 2)
+    {
+      var x = 255 * (time-st) / (ed-st);
+      res = parseInt(x);
+    }
+    else if(ty == 3)
+    {
+      var x = 255 * (ed-time) / (ed-st);
+      res = parseInt(x);
+    }
   }  
 
   return res;

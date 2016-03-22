@@ -253,6 +253,7 @@ Dancer.prototype.draw = function()
       l_width,
       l2_height
       );
+  ctx.strokeStyle = color("Green", this.light[11]);
   ctx.strokeRect(
       this.base_x + this.width/2 - l_width*1.35 - f_width * 0.2,
       this.base_y + 100 + l1_height + 5 + l2_height,
@@ -267,6 +268,7 @@ Dancer.prototype.draw = function()
       l_width,
       l2_height
       );
+  ctx.strokeStyle = color("Green", this.light[12]);
   ctx.strokeRect(
       this.base_x + this.width/2 + l_width*0.35 + f_width * 0.0,
       this.base_y + 100 + l1_height + 5 + l2_height,
@@ -301,7 +303,7 @@ Dancer.prototype.draw = function()
       h_width,
       h2_height
       );
-  ctx.strokeStyle = color("Green", this.light[1]);
+  ctx.strokeStyle = color("Yellow", this.light[1]);
   ctx.beginPath();
   ctx.arc(
       this.base_x + h_width + h_radius - 2,
@@ -333,7 +335,7 @@ Dancer.prototype.draw = function()
       h_width,
       h2_height
       );
-  ctx.strokeStyle = color("Green", this.light[6]);
+  ctx.strokeStyle = color("Yellow", this.light[6]);
   ctx.beginPath();
   ctx.arc(
       this.base_x + this.width - h_width*2 + h_radius - 2,

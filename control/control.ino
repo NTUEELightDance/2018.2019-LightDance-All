@@ -1,20 +1,21 @@
 #include "util.h"
 
-long int cnt = 0;
-
 void setup() {
   for(int i=0; i<=13; i++)
+  {
     pinMode(i, OUTPUT);
-  digitalWrite(0, HIGH);
-  digitalWrite(1, HIGH);
+    digitalWrite(i, LOW);
+  }
+  digitalWrite(2, LOW);
+  digitalWrite(7, LOW);
 
-  Serial.begin(115200);
+  if(DEBUG) Serial.begin(115200);
   LWiFi.begin();
 
   debug("Board ID : " + itos(BOARD_ID) + "\n");
   wifi_connect();
 
-  digitalWrite(0, LOW);
+  digitalWrite(2, HIGH);
 
   while(!retrieve_data())
   {
@@ -22,16 +23,14 @@ void setup() {
     delay(2000);
   }
 
-  digitalWrite(0, HIGH);
-  digitalWrite(1, LOW);
+  digitalWrite(2, LOW);
+  digitalWrite(7, HIGH);
 
   while(!calibrate_time())
   {
     debug("Calibrate time FAILED!\n");
     delay(2000);
   }
-
-  digitalWrite(0, LOW);
 
   debug("Current Time : " + dtos(get_time()) + " s\n");
   debug("From Startup : " + dtos(millis() * 0.001) + " s\n");

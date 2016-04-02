@@ -1,8 +1,11 @@
 #include "util.h"
 
-#define WIFI_SSID "dclab"
-#define WIFI_PASS "ntueedclab"
-#define SERVER_IP 192,168,163,182
+//#define WIFI_SSID "dclab"
+//#define WIFI_PASS "ntueedclab"
+//#define SERVER_IP 192,168,163,182
+#define WIFI_SSID "NTUEE"
+#define WIFI_PASS "ntueeXDD"
+#define SERVER_IP 192,168,1,123
 #define SERVER_PORT 33117
 
 char buf[MAX_LEN];

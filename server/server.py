@@ -15,6 +15,8 @@ MUSIC_DELAY = -0.040
 Ready = False
 Data = None
 
+Status = ['.'] * 7
+
 class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         def send(x):
@@ -28,10 +30,10 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             num = int(read())
             if num < 1 or num > translate.N_DANCER:
                 raise Exception('Board number {} out of range'.format(num))
-            print('Board No: {}'.format(num))
+            # print('Board No: {}'.format(num))
             send('O')
             operation = read()
-            print('Operation: {}'.format(operation))
+            # print('Operation: {}'.format(operation))
 
             if operation[0] == 'T': #Time calibration
                 if not Ready:
@@ -48,8 +50,11 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 if res[0] != 'S':
                     raise Exception('Calibration Step 2 Failed')
                 print('[ {} ] Calibration Successful! Time = {}, Delay = {}'.format(num, (tm1+tm2)/2, tm2-tm1))
+                Status[num-1] = '^'
+
             elif operation[0] == 'D': #Data transfer
                 dt = Data[num-1]
+                Status[num-1] = 'D'
                 js = json.dumps(dt, separators=(',', ':'))
                 send(str(len(js)))
                 send(js)
@@ -57,12 +62,18 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 if res[0] != 'S':
                     raise Exception('Send data failed')
                 print('[ {} ] Data Transfer Successful! Len = {} bytes'.format(num, len(js)))
+                Status[num-1] = 'R'
 
         except Exception as e:
             print(e)
 
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
+
+def report():
+    while True:
+        print('[ ' + ' '.join(Status) + ' ]')
+        time.sleep(1)
 
 if __name__ == "__main__":
     Data = translate.translate('../editor/test.in')
@@ -77,6 +88,9 @@ if __name__ == "__main__":
     print("Server loop running in thread:", server_thread.name)
 
     print_interval = 1
+
+    report_thread = threading.Thread(target=report)
+    report_thread.start()
 
     while True:
         Ready = False

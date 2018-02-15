@@ -1,7 +1,7 @@
-BPM = 128.000
+BPM = 120.000
 SEC_BEAT = 60. / BPM
-N_DANCER = 7
-N_PART = 13
+N_DANCER = 1
+N_PART = 10
 
 def bbf2sec(bbf):
     tokens = bbf.split('-')

@@ -1,5 +1,5 @@
-var N_PART = 13;
-var N_DANCER = 7;
+var N_PART = 10;
+var N_DANCER = 1;
 var BPM = 128.000;
 
 var DELAY = 0.110;
@@ -10,22 +10,33 @@ var ctx = canvas.getContext('2d');
 ctx.lineWidth = 3;
 
 var BLUE = "#0000FF";
-var BLUE_D = "#000022";
-var GREEN = "#00FF00";
-var GREEN_D = "#001100";
+var ORANGE = "#FF9400";
 var YELLOW = "#FFFF00";
-var YELLOW_D = "#111100";
+var PURPLE = "#AA00FF";
 var RED = "#FF0000";
-var RED_D = "#220000";
+var WHITE = "#FFFFFF";
+var GREEN = "#00FF00";
+
+function shadeColor2(color, percent)
+{   
+    var f = parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+    //console.log("#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1));
+    return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+}
 
 function color(c, x)
 {
-  var num = parseInt(1 + 14 * x / 255.0);
+  //console.log(x);
+  var percent = (-1) * (1.0 - (x / 255.0));
+  //console.log(percent);
+  return shadeColor2(c, percent);
+
+  /*var num = parseInt(1 + 14 * x / 255.0);
   var z = (num<10 ? String.fromCharCode(0x30+num) : String.fromCharCode(0x41+num-10));
   if(c == "Blue") return "#0000" + z + z;
   if(c == "Green") return "#00" + z + z + "00";
   if(c == "Yellow") return "#" + z + z + z + z + "00";
-  if(c == "Red") return "#" + z + z + "0000";
+  if(c == "Red") return "#" + z + z + "0000";*/
 }
 
 Data = JSON.parse(Data);
@@ -190,21 +201,181 @@ Dancer.prototype.draw = function()
   ctx.fillText(
       this.id,
       this.base_x + this.width / 2 - 5,
-      this.base_y + head_radius + 8
+      this.base_y + head_radius - 10
       );
 
-  // A head
-  ctx.strokeStyle = color("Blue", this.light[0]);
+  // AB leg
+  var l1_height = 30;
+  var l2_height = 20;
+  var l_width = 11;
+  ctx.strokeStyle = color(YELLOW, this.light[0]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - l_width*1.35,
+      this.base_y + 100,
+      l_width,
+      l1_height
+      );
+  ctx.strokeStyle = color(YELLOW, this.light[0]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 + l_width*0.35,
+      this.base_y + 100,
+      l_width,
+      l1_height
+      );
+  ctx.strokeStyle = color(YELLOW, this.light[1]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - l_width*1.35,
+      this.base_y + 100 + l1_height + 5,
+      l_width,
+      l2_height
+      );
+  ctx.strokeStyle = color(YELLOW, this.light[1]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 + l_width*0.35,
+      this.base_y + 100 + l1_height + 5,
+      l_width,
+      l2_height
+      );
+
+  // C body
+  var b1_height = 30;
+  var b1_width = 11;
+  ctx.strokeStyle = color(BLUE, this.light[2]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - b1_width*1.35,
+      this.base_y + head_radius * 2,
+      b1_width,
+      b1_height
+      );
+  ctx.strokeStyle = color(BLUE, this.light[2]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 + b1_width*0.35,
+      this.base_y + head_radius * 2,
+      b1_width,
+      b1_height
+      );
+
+  // DEF shoulder
+  var h_width = 10;
+  var h1_height = 10;
+  var h2_height = 15;
+  var h_radius = 7;
+  ctx.strokeStyle = color(GREEN, this.light[3]);
+  ctx.strokeRect(
+      this.base_x + h_width,
+      this.base_y + head_radius*2,
+      h_width,
+      h1_height
+      );
+  ctx.strokeStyle = color(BLUE, this.light[4]);
+  ctx.strokeRect(
+      this.base_x + h_width,
+      this.base_y + head_radius*2 + h1_height + 5,
+      h_width,
+      h1_height
+      );
+  ctx.strokeStyle = color(BLUE, this.light[4]);
+  ctx.strokeRect(
+      this.base_x + h_width,
+      this.base_y + head_radius*2 + 2*h1_height + 10,
+      h_width,
+      h2_height
+      );
+  ctx.strokeStyle = color(RED, this.light[5]);
   ctx.beginPath();
   ctx.arc(
-      this.base_x + this.width / 2,
-      this.base_y + head_radius,
-      head_radius - 3,
+      this.base_x + h_width + h_radius - 2,
+      this.base_y + head_radius*2 + 57,
+      h_radius,
       0,
       Math.PI * 2
       );
   ctx.stroke();
   
+  ctx.strokeStyle = color(GREEN, this.light[3]);
+  ctx.strokeRect(
+      this.base_x + this.width - h_width*2,
+      this.base_y + head_radius*2,
+      h_width,
+      h1_height
+      );
+  ctx.strokeStyle = color(BLUE, this.light[4]);
+  ctx.strokeRect(
+      this.base_x + this.width - h_width*2,
+      this.base_y + head_radius*2 + h1_height + 5,
+      h_width,
+      h1_height
+      );
+  ctx.strokeStyle = color(BLUE, this.light[4]);
+  ctx.strokeRect(
+      this.base_x + this.width - h_width*2,
+      this.base_y + head_radius*2 + 2*h1_height + 10,
+      h_width,
+      h2_height
+      );
+  ctx.strokeStyle = color(RED, this.light[5]);
+  ctx.beginPath();
+  ctx.arc(
+      this.base_x + this.width - h_width*2 + h_radius - 2,
+      this.base_y + head_radius*2 + 57,
+      h_radius,
+      0,
+      Math.PI * 2
+      );
+  ctx.stroke();
+
+  // G head hat
+  ctx.strokeStyle = color(WHITE, this.light[6]);
+  ctx.beginPath();
+  ctx.arc(
+      this.base_x + this.width / 2,
+      this.base_y + head_radius - 15,
+      head_radius - 3,
+      0,
+      Math.PI * 2
+      );
+  ctx.stroke();
+
+  var hat_height = 10;
+  var hat_width = 30;
+  ctx.strokeStyle = color(ORANGE, this.light[6]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - hat_width/2,
+      this.base_y - 20,
+      hat_width,
+      hat_height
+      );
+
+  // H glasses
+  ctx.strokeStyle = color(GREEN, this.light[7]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - 20,
+      this.base_y,
+      12,
+      12
+      );
+
+  // I belt
+  var i_width = 30;
+  var i_height = 16;
+  ctx.strokeStyle = color(GREEN, this.light[8]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - i_width/2,
+      this.base_y + head_radius * 2 + b1_height + 5,
+      i_width,
+      i_height
+      );
+
+  // J tie
+  var b3_height = 9;
+  ctx.strokeStyle = color(GREEN, this.light[8]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - i_width/2,
+      this.base_y + head_radius * 2 - 15,
+      i_width,
+      b3_height
+      );
+  /*
   // HI body
   var b1_height = 30;
   var b2_height = 16;
@@ -344,7 +515,7 @@ Dancer.prototype.draw = function()
       0,
       Math.PI * 2
       );
-  ctx.stroke();
+  ctx.stroke();*/
 };
 
 

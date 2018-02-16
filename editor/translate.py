@@ -18,7 +18,7 @@ def parse_single_part(s):
     res = []
     for i in range(N_DANCER):
         for j in range(N_PART):
-            if chr(ord('1')+i) in s and (chr(ord('A')+j) in s or 'Z' in s):
+            if chr(ord('1')+i) in s and (chr(ord('A')+j) in s or 'Z' in s or ('X' in s and j != 6)):
                 res.append((i, j))
     return res
 
@@ -93,13 +93,14 @@ if __name__ == '__main__':
         f.write("var Data = \"")
         f.write(s)
         f.write("\";")
+        #print('done')
         f.close()
         
-        res = translate_pos('test.pos')
+        '''res = translate_pos('test.pos')
         s = json.dumps(res)
         f = open('pos.js', 'w')
         f.write("var Pos = \"")
         f.write(s)
         f.write("\";")
-        f.close()
+        f.close()'''
         time.sleep(2)

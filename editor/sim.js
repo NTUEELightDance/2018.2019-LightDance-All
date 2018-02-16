@@ -205,36 +205,46 @@ Dancer.prototype.draw = function()
       );
 
   // AB leg
+  // B belt
+  var i_width = 30;
+  var i_height = 16;
   var l1_height = 30;
   var l2_height = 20;
   var l_width = 11;
   ctx.strokeStyle = color(YELLOW, this.light[0]);
   ctx.strokeRect(
       this.base_x + this.width/2 - l_width*1.35,
-      this.base_y + 100,
+      this.base_y + 100 + l1_height + 5,
       l_width,
-      l1_height
+      l2_height
       );
   ctx.strokeStyle = color(YELLOW, this.light[0]);
   ctx.strokeRect(
       this.base_x + this.width/2 + l_width*0.35,
+      this.base_y + 100 + l1_height + 5,
+      l_width,
+      l2_height
+      );
+  ctx.strokeStyle = color(YELLOW, this.light[1]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - l_width*1.35,
       this.base_y + 100,
       l_width,
       l1_height
       );
   ctx.strokeStyle = color(YELLOW, this.light[1]);
   ctx.strokeRect(
-      this.base_x + this.width/2 - l_width*1.35,
-      this.base_y + 100 + l1_height + 5,
-      l_width,
-      l2_height
-      );
-  ctx.strokeStyle = color(YELLOW, this.light[1]);
-  ctx.strokeRect(
       this.base_x + this.width/2 + l_width*0.35,
-      this.base_y + 100 + l1_height + 5,
+      this.base_y + 100,
       l_width,
-      l2_height
+      l1_height
+      );
+  ctx.strokeStyle = color(GREEN, this.light[1]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - i_width/2,
+      this.base_y + head_radius * 2 + 35,
+      i_width,
+      i_height
       );
 
   // C body
@@ -324,8 +334,34 @@ Dancer.prototype.draw = function()
       );
   ctx.stroke();
 
-  // G head hat
-  ctx.strokeStyle = color(WHITE, this.light[6]);
+  // G glasses
+  ctx.strokeStyle = color(GREEN, this.light[6]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - 15,
+      this.base_y,
+      12,
+      12
+      );
+  ctx.strokeRect(
+      this.base_x + this.width/2 + 5,
+      this.base_y,
+      12,
+      12
+      );
+
+  // H hat
+  var hat_height = 10;
+  var hat_width = 30;
+  ctx.strokeStyle = color(ORANGE, this.light[7]);
+  ctx.strokeRect(
+      this.base_x + this.width/2 - hat_width/2,
+      this.base_y - 20,
+      hat_width,
+      hat_height
+      );
+
+  // J head tie
+  ctx.strokeStyle = color(WHITE, this.light[9]);
   ctx.beginPath();
   ctx.arc(
       this.base_x + this.width / 2,
@@ -335,46 +371,15 @@ Dancer.prototype.draw = function()
       Math.PI * 2
       );
   ctx.stroke();
-
-  var hat_height = 10;
-  var hat_width = 30;
-  ctx.strokeStyle = color(ORANGE, this.light[6]);
-  ctx.strokeRect(
-      this.base_x + this.width/2 - hat_width/2,
-      this.base_y - 20,
-      hat_width,
-      hat_height
-      );
-
-  // H glasses
-  ctx.strokeStyle = color(GREEN, this.light[7]);
-  ctx.strokeRect(
-      this.base_x + this.width/2 - 20,
-      this.base_y,
-      12,
-      12
-      );
-
-  // I belt
-  var i_width = 30;
-  var i_height = 16;
-  ctx.strokeStyle = color(GREEN, this.light[8]);
-  ctx.strokeRect(
-      this.base_x + this.width/2 - i_width/2,
-      this.base_y + head_radius * 2 + b1_height + 5,
-      i_width,
-      i_height
-      );
-
-  // J tie
   var b3_height = 9;
-  ctx.strokeStyle = color(GREEN, this.light[8]);
+  ctx.strokeStyle = color(GREEN, this.light[9]);
   ctx.strokeRect(
       this.base_x + this.width/2 - i_width/2,
       this.base_y + head_radius * 2 - 15,
       i_width,
       b3_height
       );
+
   /*
   // HI body
   var b1_height = 30;

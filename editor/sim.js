@@ -1,21 +1,21 @@
 var N_PART = 10;
-var N_DANCER = 1;
-var BPM = 128.000;
+var N_DANCER = 7;
+var BPM = 120.000;
 
-var DELAY = 0.110;
+var DELAY = 0.0;
 
 var audio = document.getElementById("myAudio");
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 ctx.lineWidth = 3;
 
-var BLUE = "#0000FF";
+var BLUE = "#00FFFF";
 var ORANGE = "#FF9400";
 var YELLOW = "#FFFF00";
 var PURPLE = "#AA00FF";
 var RED = "#FF0000";
 var WHITE = "#FFFFFF";
-var GREEN = "#00FF00";
+var GREEN = "#99FF33";
 
 function shadeColor2(color, percent)
 {   
@@ -335,7 +335,7 @@ Dancer.prototype.draw = function()
   ctx.stroke();
 
   // G glasses
-  ctx.strokeStyle = color(GREEN, this.light[6]);
+  ctx.strokeStyle = color(WHITE, this.light[6]);
   ctx.strokeRect(
       this.base_x + this.width/2 - 15,
       this.base_y,
@@ -361,7 +361,7 @@ Dancer.prototype.draw = function()
       );
 
   // J head tie
-  ctx.strokeStyle = color(WHITE, this.light[9]);
+  ctx.strokeStyle = color(GREEN, this.light[9]);
   ctx.beginPath();
   ctx.arc(
       this.base_x + this.width / 2,

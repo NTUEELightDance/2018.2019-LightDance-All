@@ -1,6 +1,6 @@
 BPM = 120.000
 SEC_BEAT = 60. / BPM
-N_DANCER = 1
+N_DANCER = 7
 N_PART = 10
 
 def bbf2sec(bbf):
@@ -96,11 +96,11 @@ if __name__ == '__main__':
         #print('done')
         f.close()
         
-        '''res = translate_pos('test.pos')
+        res = translate_pos('test.pos')
         s = json.dumps(res)
         f = open('pos.js', 'w')
         f.write("var Pos = \"")
         f.write(s)
         f.write("\";")
-        f.close()'''
+        f.close()
         time.sleep(2)

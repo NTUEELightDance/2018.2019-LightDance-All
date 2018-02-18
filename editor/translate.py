@@ -1,24 +1,87 @@
 BPM = 120.000
+BPM_2 = 75.000
 SEC_BEAT = 60. / BPM
 N_DANCER = 7
-N_PART = 10
+N_PART = 26
+
+'''
+
+A 0, 10
+B 1, 11, 8
+C 2, 12
+D 3, 13
+E 4, 14
+F 5, 15
+G 6
+H 7
+I 8
+J 9
+
+M 0
+N 1
+P 5
+Q 4
+R 3
+S 2
+
+m 10
+n 11
+p 15
+q 14
+r 13
+s 12
+
+'''
 
 def bbf2sec(bbf):
     tokens = bbf.split('-')
     bar = int(tokens[0]) - 1
     beat = int(tokens[1]) - 1
     frac = 0
+    if bar >= 43:
+    	SEC_BEAT = 60. / BPM_2
+    else:
+    	SEC_BEAT = 60. / BPM
     if len(tokens) >= 3:
         a, b = tokens[2].split('/')
         frac = float(a) / float(b)
     sec = (bar * 4 + beat + frac) * SEC_BEAT
     return sec
 
+idx_chr_map = [
+    ['A','M'],
+    ['B','N'],
+    ['C','S'],
+    ['D','R'],
+    ['E','Q'],
+    ['F','P'],
+    ['G'],
+    ['H'],
+    ['B','I'],
+    ['J'],
+    ['A','m'],
+    ['B','n'],
+    ['C','s'],
+    ['D','r'],
+    ['E','q'],
+    ['F','p'],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+]
+
 def parse_single_part(s):
     res = []
     for i in range(N_DANCER):
         for j in range(N_PART):
-            if chr(ord('1')+i) in s and (chr(ord('A')+j) in s or 'Z' in s or ('X' in s and j != 6)):
+            if chr(ord('1')+i) in s and ('Z' in s or ('X' in s and j != 6) or any(c in s for c in idx_chr_map[j])):
                 res.append((i, j))
     return res
 

@@ -2,6 +2,7 @@ var N_PART = 26;
 var N_DANCER = 7;
 var BPM = 120.000;
 var BPM_2 = 75.000;
+var BPM_3 = 128.000;
 
 var DELAY = 0.0;
 
@@ -124,9 +125,15 @@ function draw_time(time)
 {
   //if(time >= 60.0 / BPM * 43 * 4)
   var beats = time / 60.0 * BPM;
-  if(parseInt(parseInt(beats) / 4) >= 43) {
+  var check_3 = time - (43*4*(60.0/BPM)) - (12*4*(60.0/BPM_2));
+  var check_beats = check_3 / 60.0 * BPM_3;
+  if(check_3 >= 0) {
+    beats = 55*4 + check_beats;
+  }
+  else if(parseInt(parseInt(beats) / 4) >= 43) {
     beats = 43*4 + (time - 60.0/BPM*43*4) / 60.0 * BPM_2;
   }
+  
   var nb = parseInt(beats);
   var frac = beats - nb;
   frac = parseInt(frac*100) / 100;

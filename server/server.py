@@ -2,20 +2,26 @@ import socketserver
 import socket
 import threading
 import time
+import sys
+
+sys.path.append('../editor')
 import translate
 import json
 import subprocess
+import platform
 
 HOST = ''
 PORT = 33117
 TIME_BASE = 0
-START_DELAY = 20
-MUSIC_DELAY = -0.040
+START_DELAY = 5
+MUSIC_DELAY = -0.2
 
 Ready = False
 Data = None
 
 Status = ['.'] * 7
+
+Shutdown = False
 
 class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
@@ -71,7 +77,7 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
 
 def report():
-    while True:
+    while not Shutdown:
         print('[ ' + ' '.join(Status) + ' ]')
         time.sleep(1)
 
@@ -92,23 +98,39 @@ if __name__ == "__main__":
     report_thread = threading.Thread(target=report)
     report_thread.start()
 
-    while True:
-        Ready = False
-        s = input()
-        Ready = True
-        TIME_BASE = time.time() + START_DELAY
-        audio_played = False
-        lst_time = -START_DELAY - print_interval
-        while True:
-            time.sleep(0.002)
-            tm = time.time() - TIME_BASE
-            if tm - lst_time >= print_interval:
-                lst_time += print_interval
-                print('Time : {}'.format(lst_time))
-            if tm >= MUSIC_DELAY and not audio_played:
-                audio_played = True
-                subprocess.Popen(['afplay', '../music/disconnected_02.wav'])
+    proc = False
 
+    try:
+        while True:
+            Ready = False
+            s = input()
+            Ready = True
+            TIME_BASE = time.time() + START_DELAY
+            audio_played = False
+            lst_time = -START_DELAY - print_interval
+            while True:
+                time.sleep(0.002)
+                tm = time.time() - TIME_BASE
+                if tm - lst_time >= print_interval:
+                    lst_time += print_interval
+                    print('Time : {}'.format(lst_time))
+                if tm >= MUSIC_DELAY and not audio_played:
+                    audio_played = True
+                    print('Play!')
+                    if platform.system() == 'Windows':
+                        import winsound
+                        winsound.PlaySound('..\\music\\disconnected_02.wav', winsound.SND_ASYNC)
+                        #proc = subprocess.Popen(['powershell', '-c', '(New-Object Media.SoundPlayer \'..\\music\\disconnected_02.wav\').PlaySync();'])
+                    else:
+                        proc = subprocess.Popen(['afplay', '../music/disconnected_02.wav'])
+    except KeyboardInterrupt:
+        print('Shutdown')
+
+    if proc is not False:
+        proc.kill()
+    if platform.system() == 'Windows':
+        winsound.PlaySound(None, winsound.SND_PURGE)
+    Shutdown = True
     server.shutdown()
     server.server_close()
 

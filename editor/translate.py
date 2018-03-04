@@ -1,6 +1,7 @@
 BPM = 120.000
 BPM_2 = 75.000
 BPM_3 = 128.000
+BPM_4 = 130.000
 SEC_BEAT = 60. / BPM
 N_DANCER = 7
 N_PART = 26
@@ -40,17 +41,22 @@ def bbf2sec(bbf):
     beat = int(tokens[1]) - 1
     frac = 0
     sec = 0
+    SEC_BEAT_4 = 60. / BPM_4
     SEC_BEAT_3 = 60. / BPM_3
     SEC_BEAT_2 = 60. / BPM_2
     SEC_BEAT = 60. / BPM
     if len(tokens) >= 3:
         a, b = tokens[2].split('/')
         frac = float(a) / float(b)
-    if bar >= 55:
+    '''if bar >= 55:
         sec = 43 * 4 * SEC_BEAT + 12 * 4 * SEC_BEAT_2 + ((bar - 55) * 4 + beat + frac) * SEC_BEAT_3
     elif bar >= 43:
         sec = 43 * 4 * SEC_BEAT + ((bar - 43) * 4 + beat + frac) * SEC_BEAT_2
     else:
+    '''
+    if bar >= 45:
+        sec = 45 * 4 * SEC_BEAT + ((bar - 45) * 4 + beat + frac) * SEC_BEAT_4
+    else:   
         sec = (bar * 4 + beat + frac) * SEC_BEAT
     return sec
 

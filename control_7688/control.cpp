@@ -19,22 +19,16 @@
 #include "mraa/common.hpp"
 #include "mraa/gpio.hpp"
 
-#define RED_PIN 0
-#define GREEN_PIN 3
-
-#define SERVER_ADDR "192.168.119.2"
-#define SERVER_PORT 33117
-#define NUM_PARTS 16
-#define BOARD_ID 3
+#include "common.h"
 
 using namespace rapidjson;
 using namespace std;
 
-volatile int led_status = 0;
-mraa::Gpio red_led(RED_PIN);
-mraa::Gpio green_led(GREEN_PIN);
+Config conf;
 
-int PINS[] = { 1, 2, 6, 5, 4, 3, 8, 15, 16, 7, 9, 10, 14, 13, 12, 11 };
+volatile int led_status = 0;
+mraa::Gpio red_led(0);
+mraa::Gpio green_led(0);
 
 char buf[1024];
 char sendbuf[1024];
@@ -81,20 +75,6 @@ double get_sys_time() {
     gettimeofday(&tv, NULL);
     return tv.tv_sec + (((double) tv.tv_usec) / 1000000);
 }
-
-struct Seg
-{
-  double start;
-  double end;
-  int ltype;
-
-  Seg(double a, double b, int c)
-  {
-    start = a;
-    end = b;
-    ltype = c;
-  }
-};
 
 vector<Seg> LD[NUM_PARTS];
 
@@ -150,7 +130,7 @@ int init_sock() {
         close(sock);
         return -1;
     }
-    sprintf(sendbuf, "%d", BOARD_ID);
+    sprintf(sendbuf, "%d", conf.board_id);
     send(sock, sendbuf, strlen(sendbuf), 0);
     recv(sock, buf, 1024, 0);
     if(buf[0] != 'O') {
@@ -162,6 +142,10 @@ int init_sock() {
 }
 
 int main() {
+    conf = read_config();
+    red_led = mraa::Gpio(conf.red_pin);
+    green_led = mraa::Gpio(conf.green_pin);
+
     pthread_t pid;
     pthread_create(&pid, NULL, led_loop, NULL);
 
@@ -263,7 +247,7 @@ int main() {
         double tm = get_sys_time() - TIME_BASE;
         for(int i = 0; i < NUM_PARTS; ++i) {
             int light = get_light(i, tm);
-            pca.setPWM(PINS[i], 0, light);
+            pca.setPWM(conf.pins[i], 0, light);
         }
     }
 

@@ -9,7 +9,7 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/filereadstream.h"
 
-#define SERVER_ADDR "192.168.119.2"
+#define SERVER_ADDR "192.168.88.233"
 #define SERVER_PORT 33117
 #define NUM_PARTS 16
 
@@ -33,8 +33,6 @@ struct Seg
 struct Config
 {
 	vector<int> pins;
-	int red_pin;
-	int green_pin;
 	int board_id;
 };
 
@@ -51,8 +49,6 @@ Config read_config() {
 	for(int i = 0; i < NUM_PARTS; ++i) {
 		conf.pins[i] = pinsArray[i].GetInt();
 	}
-	conf.red_pin = doc["red_pin"].GetInt();
-	conf.green_pin = doc["green_pin"].GetInt();
 	conf.board_id = doc["board_id"].GetInt();
 	return conf;
 }

@@ -27,7 +27,7 @@ using namespace std;
 Config conf;
 
 volatile int led_status = 0;
-mraa::Gpio red_led(0);
+mraa::Gpio red_led(3);
 mraa::Gpio green_led(0);
 
 char buf[1024];
@@ -143,8 +143,6 @@ int init_sock() {
 
 int main() {
     conf = read_config();
-    red_led = mraa::Gpio(conf.red_pin);
-    green_led = mraa::Gpio(conf.green_pin);
 
     pthread_t pid;
     pthread_create(&pid, NULL, led_loop, NULL);
@@ -175,7 +173,6 @@ int main() {
             bytesRead += rv;
             buf[rv] = '\0';
             json_str += string(buf);
-            cout << bytesRead << endl;
         }
         if(bytesRead < data_len) {
             cerr << "Transmission failed!" << endl;

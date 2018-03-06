@@ -11,6 +11,8 @@ int main() {
     Config conf;
     conf = read_config();
 
+    puts("Use -1 to all on, -2 to all off.");
+
     for(int i = 0; i < 16; ++i) {
         light[i] = true;
     }
@@ -22,8 +24,18 @@ int main() {
         }
         printf("> ");
         scanf("%d", &id);
-        id %= 16;
-        light[id] = !light[id];
+        if(id == -1) {
+            for(int i = 0; i < 16; ++i) {
+                light[i] = true;
+            }
+        } else if(id == -2) {
+            for(int i = 0; i < 16; ++i) {
+                light[i] = false;
+            }
+        } else {
+            id %= 16;
+            light[id] = !light[id];
+        }
     }
 
     return 0;

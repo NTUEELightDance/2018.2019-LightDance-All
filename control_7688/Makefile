@@ -1,5 +1,5 @@
 CC = mipsel-openwrt-linux-g++
-CFLAGS = -I/home/dodo0822/Downloads/rapidjson-1.1.0/include -fPIC -O3 -Wall
+CFLAGS = -I./rapidjson -fPIC -O3 -Wall
 LDFLAGS = -lmraa -lpthread -ldl
 
 %.o: %.cpp

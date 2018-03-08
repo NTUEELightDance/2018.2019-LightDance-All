@@ -14,7 +14,7 @@ HOST = ''
 PORT = 33117
 TIME_BASE = 0
 START_DELAY = 5
-MUSIC_DELAY = -0.2
+MUSIC_DELAY = 0
 
 Ready = False
 Data = None
@@ -121,6 +121,8 @@ if __name__ == "__main__":
                         import winsound
                         winsound.PlaySound('..\\music\\disconnected_02.wav', winsound.SND_ASYNC)
                         #proc = subprocess.Popen(['powershell', '-c', '(New-Object Media.SoundPlayer \'..\\music\\disconnected_02.wav\').PlaySync();'])
+                    elif platform.system() == 'Linux':
+                        proc = subprocess.Popen(['aplay', '../music/disconnected_02.wav'])
                     else:
                         proc = subprocess.Popen(['afplay', '../music/disconnected_02.wav'])
     except KeyboardInterrupt:

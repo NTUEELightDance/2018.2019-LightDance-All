@@ -10,11 +10,24 @@ import json
 import subprocess
 import platform
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--time', type=int, default=-1)
+
+args = parser.parse_args()
+
+if args.time != -1:
+    PART = True
+    START_FROM = float(args.time)
+else:
+    PART = False
+
 HOST = ''
 PORT = 33117
 TIME_BASE = 0
 START_DELAY = 5
-MUSIC_DELAY = 0
+MUSIC_DELAY = -0.2
 
 Ready = False
 Data = None
@@ -81,6 +94,24 @@ def report():
         print('[ ' + ' '.join(Status) + ' ]')
         time.sleep(1)
 
+def player():
+    import wave
+    import pyaudio
+    wf = wave.open('../music/disconnected_02.wav', 'rb')
+    p = pyaudio.PyAudio()
+    chunk = 1024
+    stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+        channels=wf.getnchannels(),
+        rate=wf.getframerate(),
+        output=True)
+    wf.rewind()
+    n_frames = int((time.time() - TIME_BASE - MUSIC_DELAY) * wf.getframerate())
+    wf.setpos(n_frames)
+    data = wf.readframes(chunk)
+    while data != '' and not Shutdown:
+        stream.write(data)
+        data = wf.readframes(chunk)
+
 if __name__ == "__main__":
     Data = translate.translate('../editor/test.in')
 
@@ -93,38 +124,44 @@ if __name__ == "__main__":
     server_thread.start()
     print("Server loop running in thread:", server_thread.name)
 
-    print_interval = 1
-
     report_thread = threading.Thread(target=report)
     report_thread.start()
 
     proc = False
+    player_thread = False
 
     try:
         while True:
             Ready = False
             s = input()
             Ready = True
-            TIME_BASE = time.time() + START_DELAY
+            if not PART:
+                TIME_BASE = time.time() + START_DELAY
+            else:
+                TIME_BASE = time.time() + START_DELAY - START_FROM
+            lst_time = time.time() - TIME_BASE - 1
             audio_played = False
-            lst_time = -START_DELAY - print_interval
             while True:
                 time.sleep(0.002)
                 tm = time.time() - TIME_BASE
-                if tm - lst_time >= print_interval:
-                    lst_time += print_interval
+                if tm - lst_time >= 1:
+                    lst_time += 1
                     print('Time : {}'.format(lst_time))
                 if tm >= MUSIC_DELAY and not audio_played:
                     audio_played = True
                     print('Play!')
-                    if platform.system() == 'Windows':
-                        import winsound
-                        winsound.PlaySound('..\\music\\disconnected_02.wav', winsound.SND_ASYNC)
-                        #proc = subprocess.Popen(['powershell', '-c', '(New-Object Media.SoundPlayer \'..\\music\\disconnected_02.wav\').PlaySync();'])
-                    elif platform.system() == 'Linux':
-                        proc = subprocess.Popen(['aplay', '../music/disconnected_02.wav'])
+                    if not PART:
+                        if platform.system() == 'Windows':
+                            import winsound
+                            winsound.PlaySound('..\\music\\disconnected_02.wav', winsound.SND_ASYNC)
+                            #proc = subprocess.Popen(['powershell', '-c', '(New-Object Media.SoundPlayer \'..\\music\\disconnected_02.wav\').PlaySync();'])
+                        elif platform.system() == 'Linux':
+                            proc = subprocess.Popen(['aplay', '../music/disconnected_02.wav'])
+                        else:
+                            proc = subprocess.Popen(['afplay', '../music/disconnected_02.wav'])
                     else:
-                        proc = subprocess.Popen(['afplay', '../music/disconnected_02.wav'])
+                        player_thread = threading.Thread(target=player)
+                        player_thread.start()
     except KeyboardInterrupt:
         print('Shutdown')
 

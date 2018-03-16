@@ -26,8 +26,8 @@ else:
 HOST = ''
 PORT = 33117
 TIME_BASE = 0
-START_DELAY = 5
-MUSIC_DELAY = -0.2
+START_DELAY = 10
+MUSIC_DELAY = -0.3
 
 Ready = False
 Data = None

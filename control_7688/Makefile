@@ -10,12 +10,12 @@ all: control check
 
 control: control.o PCA9685.o
 	@echo "  LD  $<"
-	@$(CC) -o control control.o PCA9685.o $(LDFLAGS)
+	@$(CC) -o upload/control control.o PCA9685.o $(LDFLAGS)
 
 check: check.o PCA9685.o
 	@echo "  LD  $<"
-	@$(CC) -o check check.o PCA9685.o $(LDFLAGS)
+	@$(CC) -o upload/check check.o PCA9685.o $(LDFLAGS)
 
 .PHONY: clean
 clean:
-	rm -f control *.o check
+	rm -f *.o upload/control upload/check

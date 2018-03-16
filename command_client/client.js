@@ -26,10 +26,19 @@ function sendData(msg) {
 	}
 };
 
+setInterval(function() {
+	try {
+		socket.send(JSON.stringify({ type: 'ping' }));
+	} catch(e) {
+
+	}
+}, 5000);
+
 socket.addEventListener('message', function(msg) {
 	var data = JSON.parse(msg.data);
-	console.log('recv', data);
-	if(data.type == 'control') {
+	console.log('recv', data.type);
+	if(data.type == 'control' || data.type == 'controllocal') {
+		var controlArgs = (data.type == 'controllocal' ? ['--local'] : ['']);
 		if(checkProcess !== '') {
 			checkProcess.kill();
 		}
@@ -38,7 +47,7 @@ socket.addEventListener('message', function(msg) {
 		}
 		setTimeout(function() {
 			console.log('spawning control process');
-			controlProcess = execFile(path.join(__dirname, 'control'), {
+			controlProcess = execFile(path.join(__dirname, 'control'), controlArgs, {
 				cwd: __dirname
 			});
 			controlProcess.stdout.on('data', function(chunk) {
@@ -80,6 +89,16 @@ socket.addEventListener('message', function(msg) {
 				console.log('e', e);
 			}
 		}, to);
+	} else if(data.type == 'reset') {
+		if(controlProcess !== '') {
+			controlProcess.kill();
+		}
+		if(checkProcess !== '') {
+			checkProcess.kill();
+		}
+		setTimeout(function() {
+			sendData('RESET ok');
+		}, 200);
 	} else if(data.type == 'poweroff') {
 		if(controlProcess !== '') {
 			controlProcess.kill();
@@ -104,6 +123,17 @@ socket.addEventListener('message', function(msg) {
 			exec('reboot');
 			process.exit();
 		}, 100);
+	} else if(data.type == 'upload') {
+		if(data.data) {
+			var dataStr = JSON.stringify(data.data);
+			fs.writeFile('data.json', dataStr, function(err) {
+				if(err) {
+					sendData('Upload failed!');
+				} else {
+					sendData('Upload OK');
+				}
+			});
+		}
 	}
 });
 

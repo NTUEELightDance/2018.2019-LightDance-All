@@ -1,4 +1,5 @@
 var WebSocket = require('ws');
+var fs = require('fs');
 
 var stdin = process.stdin;
 
@@ -8,15 +9,25 @@ var CLI = require('clui'),
 var Line          = CLI.Line,
     LineBuffer    = CLI.LineBuffer;
 
-const BOARD_NUM = 7;
+const BOARD_NUM = 10;
 
 var wss = new WebSocket.Server({ port: 33116 });
 
+var boardData = JSON.parse(fs.readFileSync('data.json', 'utf8'));;
+
 var status = [];
+var lastPing = [];
 var cmdBuf = '';
 for(var i = 0; i < BOARD_NUM; ++i) {
     status.push(['DISCONNECTED', clc.red]);
+    lastPing.push(0);
 }
+
+setInterval(() => {
+    for(var i = 0; i < BOARD_NUM; ++i) {
+        ++lastPing[i];
+    }
+}, 1000);
 
 wss.on('connection', (ws) => {
     ws.boardId = -1;
@@ -35,8 +46,13 @@ wss.on('connection', (ws) => {
                 let output = msg.output.split('\n');
                 let lastline = output[output.length-1];
                 if(lastline == '' && output.length > 1) lastline = output[output.length-2];
-                if(ws.boardId != -1) {
+                if(lastline != '' && ws.boardId != -1) {
                     status[ws.boardId] = [lastline, clc.whiteBright];
+                }
+            }
+            else if(msg.type == 'ping') {
+                if(ws.boardId != -1) {
+                    lastPing[ws.boardId] = 0;
                 }
             }
         } catch(e) {
@@ -75,16 +91,30 @@ stdin.on('data', function(key) {
                 msg = { type: 'check', part: id };
             } else if(arr[1] == 'control') {
                 msg = { type: 'control' };
+            } else if(arr[1] == 'controllocal' || arr[1] == 'cl') {
+                msg = { type: 'controllocal' };
             } else if(arr[1] == 'poweroff') {
                 msg = { type: 'poweroff' };
             } else if(arr[1] == 'reboot') {
                 msg = { type: 'reboot' };
+            } else if(arr[1] == 'upload') {
+                msg = { type: 'upload' };
+            } else if(arr[1] == 'reset' || arr[1] == 'rst') {
+                msg = { type: 'reset' };
             }
             if(msg.type == 'nope') throw 'no op';
             if(arr[0] == 'all') {
                 wss.clients.forEach((client) => {
-                    if(client.readyState === WebSocket.OPEN) {
-                        client.send(JSON.stringify(msg));
+                    if(client.readyState === WebSocket.OPEN && client.boardId > -1) {
+                        if(msg.type == 'upload') {
+                            var boardMsg = {
+                                type: 'upload',
+                                data: boardData[client.boardId]
+                            };
+                            client.send(JSON.stringify(boardMsg));
+                        } else {
+                            client.send(JSON.stringify(msg));
+                        }
                     }
                 });
             } else {
@@ -92,7 +122,15 @@ stdin.on('data', function(key) {
                 boardId -= 1;
                 wss.clients.forEach((client) => {
                     if(client.readyState === WebSocket.OPEN && client.boardId == boardId) {
-                        client.send(JSON.stringify(msg));
+                        if(msg.type == 'upload') {
+                            var boardMsg = {
+                                type: 'upload',
+                                data: boardData[boardId]
+                            };
+                            client.send(JSON.stringify(boardMsg));
+                        } else {
+                            client.send(JSON.stringify(msg));
+                        }
                     }
                 });
             }
@@ -111,13 +149,20 @@ setInterval(() => {
         x: 0,
         y: 0,
         width: 'console',
-        height: BOARD_NUM+1
+        height: BOARD_NUM+2
     });
     var line;
+    line = new Line(outputBuffer)
+        .column('ID', 4, [clc.whiteBright])
+        .column('Status', 50, [clc.whiteBright])
+        .column('Ping', 4, [clc.whiteBright])
+        .fill()
+        .store();
     for(var i = 0; i < BOARD_NUM; ++i) {
         line = new Line(outputBuffer)
             .column((i+1).toString(), 4, [clc.cyan])
             .column(status[i][0], 50, [status[i][1]])
+            .column(lastPing[i].toString(), 4, [lastPing[i] > 5 ? clc.red : clc.green])
             .fill()
             .store();
     }

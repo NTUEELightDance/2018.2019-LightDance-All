@@ -1,5 +1,5 @@
 var N_PART = 26;
-var N_DANCER = 7;
+var N_DANCER = 10;
 var BPM = 120.000;
 var BPM_2 = 75.000;
 var BPM_3 = 128.000;
@@ -544,7 +544,7 @@ Dancer.prototype.draw = function()
 
 var darr = Array(N_DANCER);
 for(var i=0; i<N_DANCER; i++)
-  darr[i] = new Dancer(i+1, 50+100*i, 80);
+  darr[i] = new Dancer(i, 50+100*i, 80);
 
 //for(var i=0; i<N_DANCER; i++)
   //darr[i].draw();

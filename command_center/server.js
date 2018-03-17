@@ -37,8 +37,8 @@ wss.on('connection', (ws) => {
             msg = JSON.parse(msg);
             if(msg.type == 'id') {
                 let id = parseInt(msg.boardId);
-                if(id > 0 && id <= BOARD_NUM) {
-                    ws.boardId = id-1;
+                if(id >= 0 && id < BOARD_NUM) {
+                    ws.boardId = id;
                     status[ws.boardId] = ['CONNECTED', clc.green];
                 }
             }
@@ -119,7 +119,6 @@ stdin.on('data', function(key) {
                 });
             } else {
                 var boardId = parseInt(arr[0]);
-                boardId -= 1;
                 wss.clients.forEach((client) => {
                     if(client.readyState === WebSocket.OPEN && client.boardId == boardId) {
                         if(msg.type == 'upload') {
@@ -160,7 +159,7 @@ setInterval(() => {
         .store();
     for(var i = 0; i < BOARD_NUM; ++i) {
         line = new Line(outputBuffer)
-            .column((i+1).toString(), 4, [clc.cyan])
+            .column(i.toString(), 4, [clc.cyan])
             .column(status[i][0], 50, [status[i][1]])
             .column(lastPing[i].toString(), 4, [lastPing[i] > 5 ? clc.red : clc.green])
             .fill()

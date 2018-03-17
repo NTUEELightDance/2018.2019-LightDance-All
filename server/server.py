@@ -32,7 +32,7 @@ MUSIC_DELAY = -0.3
 Ready = False
 Data = None
 
-Status = ['.'] * 7
+Status = ['.'] * translate.N_DANCER
 
 Shutdown = False
 
@@ -47,7 +47,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
         try:
             send('N')
             num = int(read())
-            if num < 1 or num > translate.N_DANCER:
+            if num < 0 or num >= translate.N_DANCER:
                 raise Exception('Board number {} out of range'.format(num))
             # print('Board No: {}'.format(num))
             send('O')
@@ -69,11 +69,11 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 if res[0] != 'S':
                     raise Exception('Calibration Step 2 Failed')
                 print('[ {} ] Calibration Successful! Time = {}, Delay = {}'.format(num, (tm1+tm2)/2, tm2-tm1))
-                Status[num-1] = '^'
+                Status[num] = '^'
 
             elif operation[0] == 'D': #Data transfer
-                dt = Data[num-1]
-                Status[num-1] = 'D'
+                dt = Data[num]
+                Status[num] = 'D'
                 js = json.dumps(dt, separators=(',', ':'))
                 send(str(len(js)))
                 send(js)
@@ -81,7 +81,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 if res[0] != 'S':
                     raise Exception('Send data failed')
                 print('[ {} ] Data Transfer Successful! Len = {} bytes'.format(num, len(js)))
-                Status[num-1] = 'R'
+                Status[num] = 'R'
 
         except Exception as e:
             print(e)

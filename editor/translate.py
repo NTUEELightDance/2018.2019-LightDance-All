@@ -93,7 +93,7 @@ def parse_single_part(s):
     res = []
     for i in range(N_DANCER):
         for j in range(N_PART):
-            if chr(ord('1')+i) in s and ('Z' in s or ('X' in s and j != 6) or any(c in s for c in idx_chr_map[j])):
+            if chr(ord('0')+i) in s and ('Z' in s or ('X' in s and j != 6) or any(c in s for c in idx_chr_map[j])):
                 res.append((i, j))
     return res
 
@@ -148,7 +148,7 @@ def translate_pos(fname):
             tm = bbf2sec(tokens[0])
             sm = (len(tokens) >= 2)
         else:
-            num = int(tokens[0]) - 1
+            num = int(tokens[0])
             bx = int(tokens[1])
             by = int(tokens[2])
             if not sm:

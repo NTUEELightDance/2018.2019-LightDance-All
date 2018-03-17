@@ -57,6 +57,8 @@ function getPos(idx, time)
   var bx = 0, by = 0;
   var S = Pos[idx].length;
 
+  if(S == 0) return [0, 0];
+
   var lb = 0, rb = S-1;
   while(lb < rb)
   {

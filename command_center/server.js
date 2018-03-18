@@ -1,5 +1,6 @@
 var WebSocket = require('ws');
 var fs = require('fs');
+var cp = require('child_process');
 
 var stdin = process.stdin;
 
@@ -13,10 +14,20 @@ const BOARD_NUM = 10;
 
 var wss = new WebSocket.Server({ port: 33116 });
 
-var boardData = JSON.parse(fs.readFileSync('data.json', 'utf8'));;
+function generateData() {
+    cp.execFileSync('python3', [ 'generate.py' ], {
+        cwd: __dirname
+    });
+    return ;
+}
+
+if(!fs.existsSync('data.json')) generateData();
+
+var boardData = JSON.parse(fs.readFileSync('data.json', 'utf8'));
 
 var status = [];
 var lastPing = [];
+var statusBuf = '';
 var cmdBuf = '';
 for(var i = 0; i < BOARD_NUM; ++i) {
     status.push(['DISCONNECTED', clc.red]);
@@ -80,6 +91,19 @@ stdin.on('data', function(key) {
     else if(key.charCodeAt(0) === 13) {
         try {
             var arr = cmdBuf.split(' ');
+            if(arr.length < 1) {
+                throw 'no enough arguments';
+            }
+            if(arr[0] == 'generate') {
+                generateData();
+                statusBuf = 'Generate OK';
+                setTimeout(() => {
+                    statusBuf = '';
+                }, 1500);
+                cmdBuf = '';
+                boardData = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+                return;
+            }
             if(arr.length < 2) {
                 throw 'no enough arguments';
             }
@@ -148,7 +172,7 @@ setInterval(() => {
         x: 0,
         y: 0,
         width: 'console',
-        height: BOARD_NUM+2
+        height: 'console'
     });
     var line;
     line = new Line(outputBuffer)
@@ -167,6 +191,10 @@ setInterval(() => {
     }
     line = new Line(outputBuffer)
         .column(cmdBuf, 100)
+        .fill()
+        .store();
+    line = new Line(outputBuffer)
+        .column(statusBuf, 100, [clc.bgCyanBright, clc.yellow])
         .fill()
         .store();
     outputBuffer.output();

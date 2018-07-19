@@ -100,7 +100,7 @@ def parse_parts(s):
     return list(set(res))
 
 def translate(fname):
-    lst = [x.strip() for x in open(fname)]
+    lst = [x.strip() for x in open(fname, encoding='utf-8')]
     res = []
     for i in range(N_DANCER):
         v = []
@@ -128,7 +128,7 @@ def translate(fname):
     return res
 
 def translate_pos(fname):
-    lst = [x.strip() for x in open(fname)]
+    lst = [x.strip() for x in open(fname, encoding='utf-8')]
     res = []
     for i in range(N_DANCER):
         res.append([])

@@ -1,6 +1,7 @@
 var N_PART = 26;
 var N_DANCER = 10;
-var BPM = 120.000;
+var BPM = 100.000;
+// var BPM = 120.000;
 var BPM_2 = 75.000;
 var BPM_3 = 128.000;
 var BPM_4 = 130.000;
@@ -138,8 +139,8 @@ function draw_time(time)
     beats = 43*4 + (time - 60.0/BPM*43*4) / 60.0 * BPM_2;
   }
   */
-  if(parseInt(parseInt(beats) / 4) >= 45) {
-    beats = 45*4 + (time - 60.0/BPM*45*4) / 60.0 * BPM_4;
+  if(parseInt(parseInt(beats) / 4) >= 59) {
+    beats = 59*4 + (time - 60.0/BPM*59*4) / 60.0 * BPM_4;
   }
   
   var nb = parseInt(beats);
@@ -195,7 +196,7 @@ function Dancer(id, bx, by)
   this.base_x = bx;
   this.base_y = by;
   this.height = 160;
-  this.width = 80;
+  this.width = 59;
   this.light = Array(N_PART);
   for(var i=0; i<N_PART; i++)
     this.light[i] = 0;
@@ -546,7 +547,7 @@ Dancer.prototype.draw = function()
 
 var darr = Array(N_DANCER);
 for(var i=0; i<N_DANCER; i++)
-  darr[i] = new Dancer(i, 50+100*i, 80);
+  darr[i] = new Dancer(i, 50+100*i, 59);
 
 //for(var i=0; i<N_DANCER; i++)
   //darr[i].draw();

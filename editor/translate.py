@@ -1,4 +1,5 @@
-BPM = 120.000
+BPM = 100.000
+# BPM = 120.000
 BPM_2 = 75.000
 BPM_3 = 128.000
 BPM_4 = 130.000
@@ -48,14 +49,8 @@ def bbf2sec(bbf):
     if len(tokens) >= 3:
         a, b = tokens[2].split('/')
         frac = float(a) / float(b)
-    '''if bar >= 55:
-        sec = 43 * 4 * SEC_BEAT + 12 * 4 * SEC_BEAT_2 + ((bar - 55) * 4 + beat + frac) * SEC_BEAT_3
-    elif bar >= 43:
-        sec = 43 * 4 * SEC_BEAT + ((bar - 43) * 4 + beat + frac) * SEC_BEAT_2
-    else:
-    '''
-    if bar >= 45:
-        sec = 45 * 4 * SEC_BEAT + ((bar - 45) * 4 + beat + frac) * SEC_BEAT_4
+    if bar >= 59:
+        sec = 59 * 4 * SEC_BEAT + ((bar - 59) * 4 + beat + frac) * SEC_BEAT_4
     else:   
         sec = (bar * 4 + beat + frac) * SEC_BEAT
     return sec
@@ -178,4 +173,4 @@ if __name__ == '__main__':
         f.write(s)
         f.write("\";")
         f.close()
-        time.sleep(2)
+        time.sleep(0.4)

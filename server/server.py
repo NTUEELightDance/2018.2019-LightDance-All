@@ -27,7 +27,7 @@ HOST = ''
 PORT = 33117
 TIME_BASE = 0
 START_DELAY = 3
-MUSIC_DELAY = -0.3
+MUSIC_DELAY = -0.1
 
 Ready = False
 Data = None

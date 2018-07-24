@@ -113,6 +113,8 @@ stdin.on('data', function(key) {
                 var id = parseInt(arr[2]);
                 if(id < -2 || id > 15) throw 'invalid id';
                 msg = { type: 'check', part: id };
+            } else if(arr[1] == 'rst' || arr[1] == 'reset') {
+                msg = { type: 'check', part: -1 };
             } else if(arr[1] == 'control') {
                 msg = { type: 'control' };
             } else if(arr[1] == 'controllocal' || arr[1] == 'cl') {

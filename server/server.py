@@ -27,7 +27,7 @@ HOST = ''
 PORT = 33117
 TIME_BASE = 0
 START_DELAY = 5
-MUSIC_DELAY = -0.35
+MUSIC_DELAY = 0
 
 Ready = False
 Data = None
@@ -156,7 +156,9 @@ if __name__ == "__main__":
                             winsound.PlaySound('..\\music\\EEcamp_light_dance.wav', winsound.SND_ASYNC)
                             #proc = subprocess.Popen(['powershell', '-c', '(New-Object Media.SoundPlayer \'..\\music\\disconnected_02.wav\').PlaySync();'])
                         elif platform.system() == 'Linux':
-                            proc = subprocess.Popen(['aplay', '../music/EEcamp_light_dance.wav'])
+                            #proc = subprocess.Popen(['aplay', '../music/EEcamp_light_dance.wav'])
+                            player_thread = threading.Thread(target=player)
+                            player_thread.start()
                         else:
                             proc = subprocess.Popen(['afplay', '../music/EEcamp_light_dance.wav'])
                     else:

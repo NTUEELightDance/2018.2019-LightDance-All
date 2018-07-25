@@ -62,9 +62,9 @@ idx_chr_map = [
     ['D','R'],
     ['E','Q'],
     ['F','P'],
-    ['G'],
+    ['G','I'],
     ['H'],
-    ['B','I'],
+    ['I'],
     ['J'],
     ['A','m'],
     ['B','n'],
@@ -88,7 +88,7 @@ def parse_single_part(s):
     res = []
     for i in range(N_DANCER):
         for j in range(N_PART):
-            if chr(ord('0')+i) in s and ('Z' in s or ('X' in s and j != 6) or any(c in s for c in idx_chr_map[j])):
+            if chr(ord('0')+i) in s and (('Z' in s and j != 6 and j != 8) or ('X' in s and j != 6) or any(c in s for c in idx_chr_map[j])):
                 res.append((i, j))
     return res
 

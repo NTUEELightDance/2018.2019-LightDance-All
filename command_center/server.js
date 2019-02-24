@@ -15,7 +15,7 @@ const BOARD_NUM = 10;
 var wss = new WebSocket.Server({ port: 33116 });
 
 function generateData() {
-    cp.execFileSync('python3', [ 'generate.py' ], {
+    cp.execFileSync('python', [ 'generate.py' ], {
         cwd: __dirname
     });
     return ;

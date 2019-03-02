@@ -1,45 +1,38 @@
-BPM = 100.000
-# BPM = 120.000
-BPM_2 = 75.000
+BPM = 120.000
+BPM_2 = 150.000
 BPM_3 = 128.000
-BPM_4 = 130.000
+BPM_4 = 180.000
 SEC_BEAT = 60. / BPM
-N_DANCER = 10
-N_PART = 26
+N_DANCER = 10 #hasn't change
+N_PART = 16
 '''
 2019_eenight_bpm
-00:13.3 - 01:19.8  ==> 120 bpm
-01:30.0 - 01:55.0 ==> 150 bpm
-01:55.0 - end.      ==> 126 bpm
+00:13.89 - 01:19.76	BPM = 120
+01:24.96 - 01:55.33	BPM = 150
+01:55.33 - 02:36.61	BPM = 128
+02:36.61 - end		BPM = 180
 
 '''
 
 '''
 
-A 0, 10
-B 1, 11, 8
-C 2, 12
-D 3, 13
-E 4, 14
-F 5, 15
+A 0 
+B 1 
+C 2
+D 3
+E 4
+F 5
 G 6
 H 7
 I 8
 J 9
+L 10
+M 11
+N 12
+O 13
+P 14
+Q 15
 
-M 0
-N 1
-P 5
-Q 4
-R 3
-S 2
-
-m 10
-n 11
-p 15
-q 14
-r 13
-s 12
 
 '''
 
@@ -62,41 +55,31 @@ def bbf2sec(bbf):
         sec = (bar * 4 + beat + frac) * SEC_BEAT
     return sec
 
-idx_chr_map = [
-    ['A','M'],
-    ['B','N'],
-    ['C','S'],
-    ['D','R'],
-    ['E','Q'],
-    ['F','P'],
-    ['G','I'],
-    ['H'],
-    ['I'],
-    ['J'],
-    ['A','m'],
-    ['B','n'],
-    ['C','s'],
-    ['D','r'],
-    ['E','q'],
-    ['F','p'],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    []
-]
-
+chr2Num = {
+    'A' : 0, 
+    'B' : 1, 
+    'C' : 2,
+    'D' : 3,
+    'E' : 4,
+    'F' : 5,
+    'G' : 6,
+    'H':  7,
+    'I' : 8,
+    'J' : 9,
+    'L' : 10,
+    'M' : 11,
+    'N' : 12,
+    'O' : 13,
+    'P' : 14,
+    'Q' : 15
+}
 def parse_single_part(s):
     res = []
-    for i in range(N_DANCER):
-        for j in range(N_PART):
-            if chr(ord('0')+i) in s and (('Z' in s and j != 6 and j != 8) or ('X' in s and j != 6) or any(c in s for c in idx_chr_map[j])):
-                res.append((i, j))
+    for x in range(len(s)):
+        if x == 0:
+            continue
+        else:
+            res.append( (ord(s[0])-48,chr2Num[s[x]]) )
     return res
 
 def parse_parts(s):
@@ -116,7 +99,7 @@ def translate(fname):
         res.append(v)
 
     for line in lst:
-        if line.strip() == '' or line[0] == '#':
+         if line.strip() == '' or line[0] == '#':
             continue
         tokens = line.split()
         start = bbf2sec(tokens[0])

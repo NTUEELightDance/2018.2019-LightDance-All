@@ -669,26 +669,24 @@ Dancer.prototype.draw = function()
   ctx.stroke();*/
 };
 
-/*
+
 var darr = Array(N_DANCER);
 for(var i=0; i<N_DANCER; i++)
   darr[i] = new Dancer(i, 50+100*i, 59);
-*/
 
 //for(var i=0; i<N_DANCER; i++)
   //darr[i].draw();
 
 // wait one second before starting animation
 
-/*
+
 setTimeout(function() {
   var startTime = (new Date()).getTime();
   animate(darr, canvas, ctx, startTime);
 }, 500);
-*/
 
 // for testing
-var dancer = new Dancer(0,0,0)
-setTimeout(function() {
-  animate_test(dancer, canvas, ctx)
-}, 500);
+// var dancer = new Dancer(0,0,0)
+// setTimeout(function() {
+//   animate_test(dancer, canvas, ctx)
+// }, 500);

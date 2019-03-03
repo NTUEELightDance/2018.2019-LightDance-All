@@ -8,7 +8,7 @@ SEC_BEAT_2 = 60. / BPM_2
 SEC_BEAT_3 = 60. / BPM_3
 SEC_BEAT_4 = 60. / BPM_4
 
-N_DANCER = 1
+N_DANCER = 8
 N_PART = 16
 '''
 2019_eenight_bpm (v9)
@@ -105,7 +105,7 @@ def parse_single_part(s):
 		else:
 			for y in dancers:
 				res.append( (y,chr2Num[s[x]]) )
-	print (res)
+	# print (res)
 	return res
 
 def parse_parts(s): 

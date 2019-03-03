@@ -1,5 +1,5 @@
 var N_PART = 16;
-var N_DANCER = 1;
+var N_DANCER = 8;
 var BPM_1 = 120.000
 var BPM_2 = 150.000
 var BPM_3 = 128.000
@@ -51,6 +51,19 @@ window.requestAnimFrame = (function(callback) {
       window.setTimeout(callback, 1000 / 60);
     };
 })();
+
+window.addEventListener("keydown", (e) => {
+  if(e.keyCode === 32){
+    if(audio.paused) audio.play();
+    else audio.pause();
+  }
+  else if(e.keyCode === 37){
+    audio.currentTime -= 5;
+  }
+  else if(e.keyCode === 39){
+    audio.currentTime += 5;
+  }
+})
 
 function getPos(idx, time)
 {
@@ -326,10 +339,10 @@ Dancer.prototype.draw = function()
   // 9 right abdomen
   ctx.strokeStyle = color(WHITE, this.light[8]);
   ctx.strokeRect(this.base_x + this.width/2 - head_radius + 5, this.base_y + 2*head_radius + hand_h, hand_w, hand_h);
-  ctx.strokeRect(this.base_x + this.width/2 + head_radius - hand_w - 5, this.base_y + 2*head_radius + hand_h, hand_w, hand_h);
 
-  ctx.strokeStyle = color(RED, this.light[9]);
-  ctx.strokeRect(this.base_x + this.width/2 - head_radius + 5, this.base_y + 2*head_radius + hand_h, hand_w, hand_h);
+
+  ctx.strokeStyle = color(WHITE, this.light[9]);
+
   ctx.strokeRect(this.base_x + this.width/2 + head_radius - hand_w - 5, this.base_y + 2*head_radius + hand_h, hand_w, hand_h);
 
   // 10 belt
@@ -352,6 +365,7 @@ Dancer.prototype.draw = function()
   var shoe_h = 6;
   ctx.strokeStyle = color(YELLOW, this.light[12]);
   ctx.strokeRect(this.base_x + this.width/2 - shoe_w - 2, pants_y + pants_h + 4, shoe_w, shoe_h);
+  ctx.strokeStyle = color(YELLOW, this.light[13]);
   ctx.strokeRect(this.base_x + this.width/2 + 2, pants_y + pants_h + 4, shoe_w, shoe_h);
 
   // 14 left arm image
@@ -361,6 +375,10 @@ Dancer.prototype.draw = function()
   ctx.fillStyle = color(WHITE, this.light[14]);
   ctx.beginPath();
   ctx.ellipse(this.base_x + hand_w/2, this.base_y + 2*head_radius + 2*hand_h - 7, img_w, img_h, 0, 0, 2*Math.PI);
+  ctx.fill();
+  
+  ctx.fillStyle = color(WHITE, this.light[15]);
+  ctx.beginPath();
   ctx.ellipse(this.base_x + this.width - hand_w/2, this.base_y + 2*head_radius + 2*hand_h - 7, img_w, img_h, 0, 0, 2*Math.PI);
   ctx.fill();
 

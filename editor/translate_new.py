@@ -79,15 +79,17 @@ chr2Num = {
     'Q' : 15
 }
 def parse_single_part(s):
-    res = []
-    for x in range(len(s)):
-        if x == 0:
-            continue
-        else:
-            res.append( (ord(s[0])-48,chr2Num[s[x]]) )
-    return res
+	res = []
+	dancers = []
+	for x in range(len(s)):
+		if ord(s[x]) <= 57:
+			dancers.append(ord(s[x])-48)
+		else:
+			for y in dancers:
+				res.append( (y,chr2Num[s[x]]) )
+	return res
 
-def parse_parts(s):
+def parse_parts(s): 
     res = []
     parts = s.split('+')
     for p in parts:

@@ -83,7 +83,7 @@ def parse_single_part(s):
 	dancers = []
 	for x in range(len(s)):
 		if ord(s[x]) <= 57:
-			dancers.append(ord(s[x])-ord('1'))
+			dancers.append(ord(s[x])-ord('0'))
 		else:
 			for y in dancers:
 				res.append( (y,chr2Num[s[x]]) )

@@ -1,14 +1,23 @@
-BPM = 120.000
-BPM_2 = 150.000
-BPM_3 = 128.000
-BPM_4 = 180.000
-SEC_BEAT = 60. / BPM
-N_DANCER = 10 #hasn't change
+BPM_1 = 64.000
+BPM_2 = 120.000
+BPM_3 = 94.000
+BPM_4 = 150.000
+BPM_5 = 128.000
+BPM_6 = 180.000
+SEC_BEAT_1 = 60. / BPM_1
+SEC_BEAT_2 = 60. / BPM_2
+SEC_BEAT_3 = 60. / BPM_3
+SEC_BEAT_4 = 60. / BPM_4
+SEC_BEAT_5 = 60. / BPM_5
+SEC_BEAT_6 = 60. / BPM_6
+N_DANCER = 7
 N_PART = 16
 '''
 2019_eenight_bpm
-00:13.89 - 01:19.76	BPM = 120
-01:24.96 - 01:55.33	BPM = 150
+00:00.00 - 00:13.89 BPM = 64.79 (bar 14.816)
+00:13.89 - 01:19.76	BPM = 120   (bar 131.74)
+01:19.76 - 01:24.96 BPM = 94    (bar 8.146)
+01:24.96 - 01:55.33	BPM = 150   (bar ㄑ)
 01:55.33 - 02:36.61	BPM = 128
 02:36.61 - end		BPM = 180
 
@@ -42,10 +51,6 @@ def bbf2sec(bbf):
     beat = int(tokens[1]) - 1
     frac = 0
     sec = 0
-    SEC_BEAT_4 = 60. / BPM_4
-    SEC_BEAT_3 = 60. / BPM_3
-    SEC_BEAT_2 = 60. / BPM_2
-    SEC_BEAT = 60. / BPM
     if len(tokens) >= 3:
         a, b = tokens[2].split('/')
         frac = float(a) / float(b)

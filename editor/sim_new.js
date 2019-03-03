@@ -1,10 +1,9 @@
-var N_PART = 26;
-var N_DANCER = 10;
-var BPM = 100.000;
-// var BPM = 120.000;
-var BPM_2 = 75.000;
-var BPM_3 = 128.000;
-var BPM_4 = 130.000;
+var N_PART = 16;
+var N_DANCER = 1;
+var BPM_1 = 120.000
+var BPM_2 = 150.000
+var BPM_3 = 128.000
+var BPM_4 = 180.000
 
 var DELAY = 0.0;
 
@@ -125,12 +124,34 @@ function getLight(idx, part, time)
   return res;
 }
 
+/*
+2019_eenight_bpm
+00:00.00 - 01:22.00	BPM = 120 (41*4拍)
+01:22.00 - 01:58.80		BPM = 150 (23*4拍)
+01:58.80 - 02:40.05	BPM = 128 (22*4拍)
+02:40.05 - END		BPM = 180 (33*4拍)
+*/
+
+
 function draw_time(time)
 {
   //if(time >= 60.0 / BPM * 43 * 4)
-  var beats = time / 60.0 * BPM;
-  var check_3 = time - (43*4*(60.0/BPM)) - (12*4*(60.0/BPM_2));
-  var check_beats = check_3 / 60.0 * BPM_3;
+  var beats = 0;
+  if (time <= 82.00){
+    beats = time / 60.0 * BPM_1
+  }
+  else if (time <= 118.80){
+    beats = (time - 82.00) / 60.0 * BPM_2 + 164
+  }
+  else if (time <= 160.05){
+    beats = (time - 118.80) / 60.0 * BPM_3 + 256
+  }
+  else {
+    beats = (time - 160.05) / 60.0 * BPM_3 + 343
+  }
+  // var beats = time / 60.0 * BPM;
+  // var check_3 = time - (43*4*(60.0/BPM)) - (12*4*(60.0/BPM_2));
+  // var check_beats = check_3 / 60.0 * BPM_3;
   /*
   if(check_3 >= 0) {
     beats = 55*4 + check_beats;
@@ -139,9 +160,6 @@ function draw_time(time)
     beats = 43*4 + (time - 60.0/BPM*43*4) / 60.0 * BPM_2;
   }
   */
-  if(parseInt(parseInt(beats) / 4) >= 59) {
-    beats = 59*4 + (time - 60.0/BPM*59*4) / 60.0 * BPM_4;
-  }
   
   var nb = parseInt(beats);
   var frac = beats - nb;
@@ -149,6 +167,7 @@ function draw_time(time)
   var bar = parseInt(nb / 4) + 1;
   nb = nb % 4 + 1;
   var text = bar + " - " + nb + " - " + frac;
+  console.log(text);
   
   ctx.font = "20px Monospace";
   ctx.fillStyle = "#FFFFFF";

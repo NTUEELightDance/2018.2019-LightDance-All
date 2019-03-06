@@ -54,7 +54,7 @@ Q 15
 2019_eenight_bpm
 00:00.00 - 01:22.00	BPM = 120 (41*4拍) 164
 01:22.00 - 01:58.80		BPM = 150 (23*4拍) 256
-01:58.80 - 02:40.05	BPM = 128 (22*4拍) 343
+01:58.80 - 02:40.05	BPM = 128 (22*4拍) 344
 02:40.05 - END		BPM = 180 (33*4拍) 475
 '''
 
@@ -67,14 +67,14 @@ def bbf2sec(bbf):
     if len(tokens) >= 3:
         a, b = tokens[2].split('/')
         frac = float(a) / float(b)
-    if bar <= 164 :
+    if bar <= 41 :
         sec = ( bar * 4 + beat + frac ) * SEC_BEAT_1
-    elif bar <= 256 :
-        sec = 82.00 + ((bar-164)*4+beat+frac) * SEC_BEAT_2
-    elif bar <= 155:
-        sec = 118.80 + ((bar-256)*4+beat+frac) * SEC_BEAT_3
+    elif bar <= 64 :
+        sec = 82.00 + ((bar-41)*4+beat+frac) * SEC_BEAT_2
+    elif bar <= 86:
+        sec = 118.80 + ((bar-64)*4+beat+frac) * SEC_BEAT_3
     else :
-        sec = 160.05 + ((bar-343)*4+beat+frac) * SEC_BEAT_4
+        sec = 160.05 + ((bar-86)*4+beat+frac) * SEC_BEAT_4
     
     return sec
 
@@ -154,6 +154,7 @@ def translate_pos(fname):
     for line in lst:
         if line.strip() == '' or line[0] == '#':
             continue
+        # print (line)
         tokens = line.split()
         if len(tokens) <= 2:
             tm = bbf2sec(tokens[0])

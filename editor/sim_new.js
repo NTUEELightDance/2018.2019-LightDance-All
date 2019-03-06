@@ -160,7 +160,7 @@ function draw_time(time)
     beats = (time - 118.80) / 60.0 * BPM_3 + 256
   }
   else {
-    beats = (time - 160.05) / 60.0 * BPM_3 + 343
+    beats = (time - 160.05) / 60.0 * BPM_4 + 344
   }
   // var beats = time / 60.0 * BPM;
   // var check_3 = time - (43*4*(60.0/BPM)) - (12*4*(60.0/BPM_2));

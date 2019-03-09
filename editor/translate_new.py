@@ -53,9 +53,9 @@ Q 15
 '''
 2019_eenight_bpm
 00:00.00 - 01:22.00	BPM = 120 (41*4拍) 164
-01:22.00 - 01:58.80		BPM = 150 (23*4拍) 256
+01:22.00 - 01:58.80	BPM = 150 (23*4拍) 256
 01:58.80 - 02:40.05	BPM = 128 (22*4拍) 344
-02:40.05 - END		BPM = 180 (33*4拍) 475
+02:40.05 - END		BPM = 180 (33*4拍) 476
 '''
 
 def bbf2sec(bbf):
@@ -174,7 +174,7 @@ if __name__ == '__main__':
     import time
 
     while True:
-        res = translate('test_new.in')
+        res = translate('test_ding.in')
         s = json.dumps(res)
         f = open('light.js', 'w')
         f.write("var Data = \"")
@@ -182,7 +182,7 @@ if __name__ == '__main__':
         f.write("\";")
         #print('done')
         f.close()
-        
+
         res = translate_pos('test_new.pos')
         s = json.dumps(res)
         f = open('pos.js', 'w')

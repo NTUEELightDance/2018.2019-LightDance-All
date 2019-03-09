@@ -9,7 +9,7 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/filereadstream.h"
 
-#define SERVER_ADDR "192.168.0.107"
+#define SERVER_ADDR "192.168.119.2"
 #define SERVER_PORT 33117
 #define NUM_PARTS 16
 

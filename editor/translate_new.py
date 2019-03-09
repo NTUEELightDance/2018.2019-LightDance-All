@@ -174,7 +174,7 @@ if __name__ == '__main__':
     import time
 
     while True:
-        res = translate('test_ding.in')
+        res = translate('tron.in')
         s = json.dumps(res)
         f = open('light.js', 'w')
         f.write("var Data = \"")
@@ -183,7 +183,7 @@ if __name__ == '__main__':
         #print('done')
         f.close()
 
-        res = translate_pos('test_new.pos')
+        res = translate_pos('tron.pos')
         s = json.dumps(res)
         f = open('pos.js', 'w')
         f.write("var Pos = \"")

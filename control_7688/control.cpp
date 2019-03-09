@@ -17,6 +17,7 @@
 
 #include "mraa/common.hpp"
 #include "mraa/gpio.hpp"
+#include "mraa.hpp"
 
 #ifdef USE_INTERNAL_PWM
     #include "mraa/pwm.hpp"
@@ -28,6 +29,9 @@
 
 using namespace rapidjson;
 using namespace std;
+
+#define SPI_PORT 0
+mraa::Spi spi(SPI_PORT);
 
 Config conf;
 bool use_local_file = false;
@@ -48,6 +52,13 @@ double TIME_BASE = 0;
 #else
     PCA9685 pca(0, 0x40);
 #endif
+
+void init_spi(){
+    spi.mode( mraa::SPI_MODE0 );
+    spi.frequency(2000000);
+}
+
+vector < vector< vector<Color> > > anim;
 
 double get_sys_time() {
     struct timeval tv;
@@ -203,6 +214,38 @@ int main(int argc, char** argv) {
         printf("Part %d : %d segments\n", i, LD[i].size());
     }
 
+    init_spi();
+    Document doc2;
+    data_ok = false;
+    while(!data_ok){
+        FILE *fp = fopen("data_ws.json", "r");
+        if (fp<0){
+            cerr << "Cannot read local file!" << endl;
+        }
+        char readBuffer[65536];
+        FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+        doc2.ParseStream(is);
+        fclose(fp);
+        cout << "Local file read OK" << endl;
+        data_ok = true;
+    }
+
+    const Value& jfile = doc2;
+    for (SizeType i = 0;i < jfile.Size();i++){
+        const Value& jarray = jfile[i]
+        vector< vector<Color> > new_frame_list;
+        anim.push_back(new_vec);
+        for (SizeType j = 0 ; j < jarray.Size() ; j++){
+            vector<Color> new_frame;
+            anim[i].push_back(newVec);
+            const Value& jframe = jarray[j];
+            for (SizeType k=0 ; k < jframe.Size() ; k++){
+                const Value& jseg = jframe[j];
+                anim[i][j].push_back(Seg(jseg[0].GetInt(), jseg[1].GetInt(), jseg[2].GetInt() ));
+            }
+        }
+    }
+
     while(!time_ok) {
         int sock = init_sock();
         if(sock < 0) {
@@ -243,6 +286,7 @@ int main(int argc, char** argv) {
         time_ok = true;
     }
 
+    int last_frame = -1;
     while(true) {
         double tm = get_sys_time() - TIME_BASE;
         for(int i = 0; i < NUM_PARTS; ++i) {
@@ -253,6 +297,21 @@ int main(int argc, char** argv) {
             #else
                 pca.setPWM(conf.pins[i], 0, light);
             #endif
+        }
+
+        int current_frame = (int)(tm*10);
+        if(current_frame > last_frame){
+            // send ws signal
+            for(unsigned int i=0;i<anim.size();i++){
+                spi.writeByte( (uint8_t)(63) ); // start byte
+                spi.writeByte( (uint8_t)(i) ); // i-th gif
+                for (unsigned int j=0;j<anim[i].size();j++){
+                    spi.writeByte( (uint8_t)anim[i][current_frame][j].r );
+                    spi.writeByte( (uint8_t)anim[i][current_frame][j].g );
+                    spi.writeByte( (uint8_t)anim[i][current_frame][j].b );
+                }
+            }
+            last_frame = current_frame;
         }
     }
 

@@ -30,6 +30,20 @@ struct Seg
   }
 };
 
+struct Color
+{
+	int r;
+	int g;
+	int b;
+
+	Color(int x, int y, int z)
+	{
+		r = x;
+		g = y;
+		b = z;
+	}
+};
+
 struct Config
 {
 	vector<int> pins;

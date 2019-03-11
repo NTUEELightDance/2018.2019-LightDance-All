@@ -226,24 +226,28 @@ int main(int argc, char** argv) {
         FileReadStream is(fp, readBuffer, sizeof(readBuffer));
         doc2.ParseStream(is);
         fclose(fp);
-        cout << "Local file read OK" << endl;
+        cout << "data_ws.json read OK" << endl;
         data_ok = true;
     }
 
     const Value& jfile = doc2;
     for (SizeType i = 0;i < jfile.Size();i++){
-        const Value& jarray = jfile[i]
+        const Value& jarray = jfile[i];
         vector< vector<Color> > new_frame_list;
-        anim.push_back(new_vec);
+        anim.push_back(new_frame_list);
         for (SizeType j = 0 ; j < jarray.Size() ; j++){
             vector<Color> new_frame;
-            anim[i].push_back(newVec);
+            anim[i].push_back(new_frame);
             const Value& jframe = jarray[j];
             for (SizeType k=0 ; k < jframe.Size() ; k++){
-                const Value& jseg = jframe[j];
-                anim[i][j].push_back(Seg(jseg[0].GetInt(), jseg[1].GetInt(), jseg[2].GetInt() ));
+                const Value& jseg = jframe[k];
+                anim[i][j].push_back(Color(jseg[0].GetInt(), jseg[1].GetInt(), jseg[2].GetInt() ));
             }
         }
+    }
+    cout << anim.size() << " LED arrays" << endl;
+    for (unsigned int i = 0;i < anim.size();i++){
+        cout << "Length of array[" << i << "]: " << anim[i].size() << endl;
     }
 
     while(!time_ok) {
@@ -299,13 +303,16 @@ int main(int argc, char** argv) {
             #endif
         }
 
-        int current_frame = (int)(tm*10);
+        // temp test
+        int max_length = anim[0].size();
+
+        int current_frame = ((int)(tm*10))%max_length;
         if(current_frame > last_frame){
             // send ws signal
             for(unsigned int i=0;i<anim.size();i++){
                 spi.writeByte( (uint8_t)(63) ); // start byte
                 spi.writeByte( (uint8_t)(i) ); // i-th gif
-                for (unsigned int j=0;j<anim[i].size();j++){
+                for (unsigned int j=0;j<anim[i][current_frame].size();j++){
                     spi.writeByte( (uint8_t)anim[i][current_frame][j].r );
                     spi.writeByte( (uint8_t)anim[i][current_frame][j].g );
                     spi.writeByte( (uint8_t)anim[i][current_frame][j].b );

@@ -66,7 +66,6 @@ void loop() {
       rgb_counter++;
     }
     else{
-//      Serial.println(rgb[0]);
       if(Slavereceived==0){
         rgb[rgb_counter] = 0;
       }

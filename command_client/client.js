@@ -133,6 +133,14 @@ socket.addEventListener('message', function(msg) {
 					sendData('Upload OK');
 				}
 			});
+			// var wsStr = JSON.stringify(data.wsdata);
+			// fs.writeFile('data_ws.json', wsStr, function(err) {
+			// 	if(err) {
+			// 		sendData('Upload failed!');
+			// 	} else {
+			// 		sendData('Upload OK');
+			// 	}
+			// });
 		}
 	}
 });

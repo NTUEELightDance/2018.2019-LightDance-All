@@ -24,6 +24,7 @@ function generateData() {
 if(!fs.existsSync('data.json')) generateData();
 
 var boardData = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+// var wsData = JSON.parse(fs.readFileSync('data_ws.json', 'utf-8'));
 
 var status = [];
 var lastPing = [];
@@ -136,6 +137,7 @@ stdin.on('data', function(key) {
                             var boardMsg = {
                                 type: 'upload',
                                 data: boardData[client.boardId]
+                                // wsdata: wsData[client.boardId]
                             };
                             client.send(JSON.stringify(boardMsg));
                         } else {
@@ -151,6 +153,7 @@ stdin.on('data', function(key) {
                             var boardMsg = {
                                 type: 'upload',
                                 data: boardData[boardId]
+                                // wsdata: wsData[boardId]
                             };
                             client.send(JSON.stringify(boardMsg));
                         } else {

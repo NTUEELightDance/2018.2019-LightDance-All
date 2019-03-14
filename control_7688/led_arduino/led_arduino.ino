@@ -4,10 +4,10 @@
 #define COLOR_ORDER GRB
 #define LED_TYPE WS2812
 
-#define NUM_WS 2
+#define NUM_WS 5
 
-int NUM_LEDS[] = {88,88};
-int LED_DT[]   = {7 ,8 };
+int NUM_LEDS[] = {88,48,60,36,36};
+int LED_DT[]   = {5, 6, 7, 8, 9};
 
 volatile boolean received;
 volatile byte Slavereceived,Slavesend;
@@ -26,8 +26,11 @@ void setup() {
   for (int i=0;i<NUM_WS;i++){
     ws[i] = (struct CRGB*)malloc(sizeof(struct CRGB)*NUM_LEDS[i]);
   }
-  LEDS.addLeds<LED_TYPE, 7, COLOR_ORDER>(ws[0], NUM_LEDS[0]);
-  LEDS.addLeds<LED_TYPE, 8, COLOR_ORDER>(ws[1], NUM_LEDS[1]);
+  LEDS.addLeds<LED_TYPE, 2, COLOR_ORDER>(ws[0], NUM_LEDS[0]);
+  LEDS.addLeds<LED_TYPE, 3, COLOR_ORDER>(ws[1], NUM_LEDS[1]);
+  LEDS.addLeds<LED_TYPE, 4, COLOR_ORDER>(ws[2], NUM_LEDS[2]);
+  LEDS.addLeds<LED_TYPE, 5, COLOR_ORDER>(ws[3], NUM_LEDS[3]);
+  LEDS.addLeds<LED_TYPE, 6, COLOR_ORDER>(ws[4], NUM_LEDS[4]);
   
 //  LEDS.addLeds<LED_TYPE, LED_DT, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(max_bright);
@@ -77,7 +80,9 @@ void loop() {
       led_counter++;
       if(led_counter >= NUM_LEDS[wsid]){
         led_counter = 0;
-        FastLED.show();
+        if(wsid == NUM_WS-1){
+          FastLED.show();
+        }
       }
     }
     received = false;

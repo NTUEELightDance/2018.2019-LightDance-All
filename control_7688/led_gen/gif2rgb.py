@@ -2,11 +2,13 @@ import numpy as np
 from PIL import Image, ImageSequence
 import json
 import sys
+import os
 
-if len(sys.argv) < 2:
+if len(sys.argv) < 3:
     sys.exit("File name missing!")
 else:
     file_path = sys.argv[1]
+    output_path = sys.argv[2]
 img = Image.open(file_path)
 frames = np.array([np.array(frame.copy().convert('RGB').getdata(),dtype=np.uint8).reshape(frame.size[1],frame.size[0],3) for frame in ImageSequence.Iterator(img)])
 # frames.shape = (frame_num * frame_height * frame_width * 3(RGB) )
@@ -22,7 +24,7 @@ for i in range(frames_list.shape[0]):
         for k in range(frames_list.shape[2]):
             if frames_list[i][j][k] > 0:
                 frames_list[i][j][k] -= 1
-frames_list = frames_list.tolist()
 
-with open('data_ws.json', 'w') as outfile:
-    json.dump(frames_list, outfile)
+np.save(output_path, frames_list)
+
+

@@ -97,7 +97,7 @@ def report():
 def player():
     import wave
     import pyaudio
-    wf = wave.open('../music/EEcamp_light_dance.wav', 'rb')
+    wf = wave.open('../music/light_dance_v11.wav', 'rb')
     p = pyaudio.PyAudio()
     chunk = 1024
     stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
@@ -113,7 +113,7 @@ def player():
         data = wf.readframes(chunk)
 
 if __name__ == "__main__":
-    Data = translate.translate('../editor/test.in')
+    Data = translate.translate('../editor/tron.in')
 
     socketserver.TCPServer.allow_reuse_address = True
     server = ThreadedTCPServer((HOST, PORT), ThreadedTCPRequestHandler)
@@ -153,14 +153,14 @@ if __name__ == "__main__":
                     if not PART:
                         if platform.system() == 'Windows':
                             import winsound
-                            winsound.PlaySound('..\\music\\EEcamp_light_dance.wav', winsound.SND_ASYNC)
+                            winsound.PlaySound('..\\music\\light_dance_v11.wav', winsound.SND_ASYNC)
                             #proc = subprocess.Popen(['powershell', '-c', '(New-Object Media.SoundPlayer \'..\\music\\disconnected_02.wav\').PlaySync();'])
                         elif platform.system() == 'Linux':
-                            #proc = subprocess.Popen(['aplay', '../music/EEcamp_light_dance.wav'])
+                            #proc = subprocess.Popen(['aplay', '../music/light_dance_v11.wav'])
                             player_thread = threading.Thread(target=player)
                             player_thread.start()
                         else:
-                            proc = subprocess.Popen(['afplay', '../music/EEcamp_light_dance.wav'])
+                            proc = subprocess.Popen(['afplay', '../music/light_dance_v11.wav'])
                     else:
                         player_thread = threading.Thread(target=player)
                         player_thread.start()

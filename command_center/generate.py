@@ -1,9 +1,9 @@
 import sys
 sys.path.append('../editor')
-import translate
+import translate_new
 import json
 
-Data = translate.translate('../editor/tron.in')
+Data = translate_new.translate('../editor/tron.in')
 
 with open('data.json', 'w') as outfile:
     json.dump(Data, outfile)

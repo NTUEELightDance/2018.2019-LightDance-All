@@ -6,8 +6,9 @@
 
 #define NUM_WS 5
 
-int NUM_LEDS[] = {88,48,60,36,36};
+int NUM_LEDS[] = {88,96,60,36,36};
 int LED_DT[]   = {5, 6, 7, 8, 9};
+int prev_time = 0;
 
 volatile boolean received;
 volatile byte Slavereceived,Slavesend;
@@ -26,11 +27,11 @@ void setup() {
   for (int i=0;i<NUM_WS;i++){
     ws[i] = (struct CRGB*)malloc(sizeof(struct CRGB)*NUM_LEDS[i]);
   }
-  LEDS.addLeds<LED_TYPE, 2, COLOR_ORDER>(ws[0], NUM_LEDS[0]);
-  LEDS.addLeds<LED_TYPE, 3, COLOR_ORDER>(ws[1], NUM_LEDS[1]);
-  LEDS.addLeds<LED_TYPE, 4, COLOR_ORDER>(ws[2], NUM_LEDS[2]);
-  LEDS.addLeds<LED_TYPE, 5, COLOR_ORDER>(ws[3], NUM_LEDS[3]);
-  LEDS.addLeds<LED_TYPE, 6, COLOR_ORDER>(ws[4], NUM_LEDS[4]);
+  LEDS.addLeds<LED_TYPE, 5, COLOR_ORDER>(ws[0], NUM_LEDS[0]);
+  LEDS.addLeds<LED_TYPE, 6, COLOR_ORDER>(ws[1], NUM_LEDS[1]);
+  LEDS.addLeds<LED_TYPE, 7, COLOR_ORDER>(ws[2], NUM_LEDS[2]);
+  LEDS.addLeds<LED_TYPE, 8, COLOR_ORDER>(ws[3], NUM_LEDS[3]);
+  LEDS.addLeds<LED_TYPE, 9, COLOR_ORDER>(ws[4], NUM_LEDS[4]);
   
 //  LEDS.addLeds<LED_TYPE, LED_DT, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(max_bright);
@@ -40,16 +41,27 @@ void setup() {
   SPI.attachInterrupt();                  //Interuupt ON is set for SPI commnucation
 //  pinMode(13,OUTPUT);
   Serial.begin(2000000);
+  prev_time = millis();
 }
 
-ISR (SPI_STC_vect)                        //Inerrrput routine function 
+ISR (SPI_STC_vect)                        //Interrrput routine function 
 {
   Slavereceived = SPDR;         // Value received from master if store in variable slavereceived
   received = true;                        //Sets received as True 
 }
 
 void loop() {
+  if (millis()-prev_time>1000){
+    for(int i = 0;i < NUM_WS;i++){
+      for(int j = 0;j < NUM_LEDS[i]; j++){
+        ws[i][j].setRGB(0,0,0);
+      }
+    }
+    FastLED.show();
+    prev_time = millis();
+  }
   if(received == true){
+    prev_time = millis();
     if(Slavereceived == 63){ // start byte
       rgb_counter = 0;
       led_counter = 0;

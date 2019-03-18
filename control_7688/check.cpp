@@ -8,6 +8,10 @@
 #include <cstdio>
 
 #include "common.h"
+#include "mraa.hpp"
+
+#define SPI_PORT 0
+mraa::Spi spi(SPI_PORT);
 
 #ifdef USE_INTERNAL_PWM
     mraa::Pwm pwm_0(18);
@@ -18,6 +22,7 @@
 
 bool light[16];
 
+
 int main() {
     #ifdef USE_INTERNAL_PWM
         pwm_0.period_ms(2);
@@ -25,6 +30,9 @@ int main() {
         pwm_0.enable(true);
         pwm_1.enable(true);
     #endif
+
+    spi.mode( mraa::SPI_MODE0 );
+    spi.frequency(2000000);
 
     Config conf;
     conf = read_config();
@@ -58,6 +66,24 @@ int main() {
         } else {
             id %= 16;
             light[id] = !light[id];
+        }
+        unsigned int num_ws = 5;
+        unsigned int num_led[] = {88,96,60,36,36};
+        for(unsigned int i=0;i<num_ws;i++){
+            spi.writeByte( (uint8_t)(63) ); // start byte
+            spi.writeByte( (uint8_t)(i) ); // i-th gif
+            for (unsigned int j=0;j<num_led[i];j++){
+                if (id == -1){
+                    spi.writeByte( 0 );
+                    spi.writeByte( 0 );
+                    spi.writeByte( 1 );
+                }
+                else{
+                    spi.writeByte( 0 );
+                    spi.writeByte( 0 );
+                    spi.writeByte( 0 );
+                }
+            }
         }
     }
 

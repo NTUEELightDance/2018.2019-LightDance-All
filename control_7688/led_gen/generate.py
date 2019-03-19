@@ -20,14 +20,15 @@ if os.path.isdir("./gifs"):
 				print ("Find " + filename)
 				frames = np.array([np.array(frame.copy().convert('RGB').getdata(),dtype=np.uint8).reshape(frame.size[1],frame.size[0],3) for frame in ImageSequence.Iterator(img)])
 				if j == 1: # shoulder is vertical
+					frames = np.concatenate([frames[:,:,0:4,:],frames[:,:,12:16,:]],axis=2)
 					frames = frames.transpose(0,2,1,3)
 				for a in range(frames.shape[0]):
 					for b in range(1,frames.shape[1],2):
 						frames[a][b] = np.flip(frames[a][b], 0)
 				frames_list = np.right_shift(frames,2).reshape(frames.shape[0], -1, 3)
-				if i >= 8 and j == 0:
-					frames_list = np.concatenate([frames_list,np.zeros([frames.shape[0],88-frames.shape[1],3],dtype=np.int)],axis=1)
-				q = np.where(frames_list <= 2)
+				#if i >= 8 and j == 0:
+				#	frames_list = np.concatenate([frames_list,np.zeros([frames.shape[0],88-frames.shape[1],3],dtype=np.int)],axis=1)
+				p = np.where(frames_list <= 2)
 				w = np.where(frames_list > 2)
 				frames_list[p] = 0
 				frames_list[w] -= 2

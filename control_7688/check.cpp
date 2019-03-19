@@ -22,6 +22,9 @@ mraa::Spi spi(SPI_PORT);
 
 bool light[16];
 
+unsigned int num_ws = 5;
+unsigned int num_led[] = {88,96,60,36,36};
+
 
 int main() {
     #ifdef USE_INTERNAL_PWM
@@ -67,25 +70,28 @@ int main() {
             id %= 16;
             light[id] = !light[id];
         }
-        unsigned int num_ws = 5;
-        unsigned int num_led[] = {88,96,60,36,36};
-        for(unsigned int i=0;i<num_ws;i++){
-            spi.writeByte( (uint8_t)(63) ); // start byte
-            spi.writeByte( (uint8_t)(i) ); // i-th gif
-            for (unsigned int j=0;j<num_led[i];j++){
-                if (id == -1){
-                    spi.writeByte( 0 );
-                    spi.writeByte( 0 );
-                    spi.writeByte( 1 );
+        if (id == -1){
+            for(unsigned int i=0;i<num_ws;i++){
+                spi.writeByte( (uint8_t)(63) ); // start byte
+                spi.writeByte( (uint8_t)(i) ); // i-th gif
+                for (unsigned int j=0;j<num_led[i];j++){
+                    spi.writeByte( (uint8_t)(6) );
+                    spi.writeByte( (uint8_t)(6) );
+                    spi.writeByte( (uint8_t)(6) );
                 }
-                else{
-                    spi.writeByte( 0 );
-                    spi.writeByte( 0 );
-                    spi.writeByte( 0 );
+            }
+        }
+        else{
+            for(unsigned int i=0;i<num_ws;i++){
+                spi.writeByte( (uint8_t)(63) ); // start byte
+                spi.writeByte( (uint8_t)(i) ); // i-th gif
+                for (unsigned int j=0;j<num_led[i];j++){
+                    spi.writeByte( (uint8_t)(0) );
+                    spi.writeByte( (uint8_t)(0) );
+                    spi.writeByte( (uint8_t)(0) );
                 }
             }
         }
     }
-
     return 0;
 }

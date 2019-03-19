@@ -294,7 +294,7 @@ int main(int argc, char** argv) {
         time_ok = true;
     }
 
-    int max_length = anim[0].size() - 20;
+    int max_length = anim[0].size() - 23;
     int limit_length = anim[0].size();
 
     int last_frame = -1;
@@ -311,7 +311,7 @@ int main(int argc, char** argv) {
         }
 
         int current_frame = (int)(tm*10);
-        if(tm < 0 || current_frame > limit_length){
+        if(tm < 0 || current_frame >= limit_length){
             for(unsigned int i=0;i<num_ws;i++){
                 spi.writeByte( (uint8_t)(63) ); // start byte
                 spi.writeByte( (uint8_t)(i) ); // i-th gif
@@ -323,7 +323,7 @@ int main(int argc, char** argv) {
             }
         }
         else if(current_frame > last_frame){
-            if(current_frame > max_length){
+            if(current_frame >= max_length){
                 // change max light
                 for(unsigned int i=0;i<anim.size();i++){
                     spi.writeByte( (uint8_t)(62) ); // start byte

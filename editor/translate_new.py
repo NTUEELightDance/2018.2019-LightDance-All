@@ -67,11 +67,11 @@ def bbf2sec(bbf):
     if len(tokens) >= 3:
         a, b = tokens[2].split('/')
         frac = float(a) / float(b)
-    if bar <= 41 :
+    if bar < 41 :
         sec = ( bar * 4 + beat + frac ) * SEC_BEAT_1
-    elif bar <= 64 :
+    elif bar < 64 :
         sec = 82.00 + ((bar-41)*4+beat+frac) * SEC_BEAT_2
-    elif bar <= 86:
+    elif bar < 86:
         sec = 118.80 + ((bar-64)*4+beat+frac) * SEC_BEAT_3
     else :
         sec = 160.05 + ((bar-86)*4+beat+frac) * SEC_BEAT_4

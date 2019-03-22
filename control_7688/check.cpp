@@ -21,6 +21,7 @@ mraa::Spi spi(SPI_PORT);
 #endif
 
 bool light[16];
+bool wslight = true;
 
 unsigned int num_ws = 5;
 unsigned int num_led[] = {88,96,60,36,36};
@@ -56,28 +57,15 @@ int main() {
                 pca.setPWM(conf.pins[i], 0, (light[i] ? 4095 : 0));
             #endif
         }
-        printf("> ");
-        if(!(~scanf("%d", &id))) break;
-        if(id == -1) {
-            for(int i = 0; i < 16; ++i) {
-                light[i] = true;
-            }
-        } else if(id == -2) {
-            for(int i = 0; i < 16; ++i) {
-                light[i] = false;
-            }
-        } else {
-            id %= 16;
-            light[id] = !light[id];
-        }
-        if (id == -1){
+
+        if (wslight){
             for(unsigned int i=0;i<num_ws;i++){
-                spi.writeByte( (uint8_t)(63) ); // start byte
+                spi.writeByte( (uint8_t)(62) ); // start byte
                 spi.writeByte( (uint8_t)(i) ); // i-th gif
                 for (unsigned int j=0;j<num_led[i];j++){
-                    spi.writeByte( (uint8_t)(6) );
-                    spi.writeByte( (uint8_t)(6) );
-                    spi.writeByte( (uint8_t)(6) );
+                    spi.writeByte( (uint8_t)(60) );
+                    spi.writeByte( (uint8_t)(60) );
+                    spi.writeByte( (uint8_t)(60) );
                 }
             }
         }
@@ -92,6 +80,25 @@ int main() {
                 }
             }
         }
+
+        printf("> ");
+        if(!(~scanf("%d", &id))) break;
+        if(id == -1) {
+            wslight = true;
+            for(int i = 0; i < 16; ++i) {
+                light[i] = true;
+            }
+        } else if(id == -2) {
+            wslight = false;
+            for(int i = 0; i < 16; ++i) {
+                light[i] = false;
+            }
+        } else {
+            wslight = false;
+            id %= 16;
+            light[id] = !light[id];
+        }
+        
     }
     return 0;
 }
